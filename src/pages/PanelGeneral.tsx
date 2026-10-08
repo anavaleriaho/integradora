@@ -74,7 +74,7 @@ export default function PanelGeneral() {
     <>
       <Header
         titulo="Panel General"
-        subtitulo="Información general sobre la plataforma EduAlert."
+        subtitulo="Información general sobre la plataforma ProEdu."
       />
 
       <div className="pagina">
@@ -83,7 +83,7 @@ export default function PanelGeneral() {
             <GraduationCap size={64} />
           </div>
           <div>
-            <h2>EDUALERT</h2>
+            <h2>ProEdu</h2>
             <p className="pg-tagline">
               Sistema inteligente para la detección de riesgo académico
             </p>
@@ -118,7 +118,7 @@ export default function PanelGeneral() {
           </div>
         </section>
 
-        <h2 className="pg-titulo">¿Qué ofrece EduAlert?</h2>
+        <h2 className="pg-titulo">¿Qué ofrece ProEdu?</h2>
         <section className="pg-funciones">
           {funciones.map((f) => {
             const Icono = f.icono;

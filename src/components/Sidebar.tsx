@@ -8,8 +8,8 @@ import {
   FileText,
   Settings,
   GraduationCap,
-  ChevronRight,
 } from 'lucide-react';
+import { useAuth } from '../auth/useAuth';
 
 const menu = [
   { nombre: 'Panel General', icono: House, ruta: '/panel' },
@@ -21,6 +21,10 @@ const menu = [
 ];
 
 export default function Sidebar() {
+  const { usuario } = useAuth();
+  const nombre = usuario?.nombre ?? '';
+  const cargo = usuario?.cargo ?? '';
+
   return (
     <aside className="sidebar">
       <div className="logo">
@@ -59,12 +63,13 @@ export default function Sidebar() {
       </nav>
 
       <div className="usuario">
-        <div className="usuario-avatar">CA</div>
-        <div className="usuario-info">
-          <strong>Candy</strong>
-          <span>Trabajadora social</span>
+        <div className="usuario-avatar">
+          {nombre.slice(0, 2).toUpperCase()}
         </div>
-        <ChevronRight size={18} />
+        <div className="usuario-info">
+          <strong>{nombre}</strong>
+          <span>{cargo}</span>
+        </div>
       </div>
     </aside>
   );
