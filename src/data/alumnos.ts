@@ -3,7 +3,7 @@ import type { Alumno } from '../types';
 export const alumnos: Alumno[] = [
   {
     id: 1,
-    nombre: 'Juan Pérez García',
+    nombre: 'Pedro Pérez García',
     matricula: '2025-00123',
     carrera: 'Ingeniería Software',
     semestre: 4,
