@@ -1,0 +1,215 @@
+/* ===== Pantalla Estadísticas ===== */
+
+/* ---------- Tarjetas superiores ---------- */
+.es-tarjetas {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.es-indicador {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  background: var(--card);
+  border: 1px solid #dbe6f5;
+  border-radius: 14px;
+}
+
+.es-indicador.alerta {
+  background: var(--high-bg);
+  border-color: #f8d0d0;
+}
+
+.es-ind-icono {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #dbe9fd;
+  color: var(--primary);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.es-indicador.alerta .es-ind-icono {
+  background: #f9cdcd;
+  color: var(--high);
+}
+
+.es-ind-titulo {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.es-ind-valor {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.es-cambio {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.es-cambio.bueno {
+  color: var(--low);
+}
+
+.es-cambio.malo {
+  color: var(--high);
+}
+
+.es-ind-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* ---------- Filas de paneles ---------- */
+.es-fila {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.es-fila.es-ultima {
+  grid-template-columns: 1fr 1.5fr;
+  align-items: start;
+}
+
+.es-panel {
+  background: var(--card);
+  border: 1px solid #dbe6f5;
+  border-radius: 14px;
+  padding: 20px;
+  min-width: 0;
+}
+
+.es-panel h2 {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.es-sub {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+/* ---------- Resumen general ---------- */
+.es-resumen {
+  list-style: none;
+  margin-top: 12px;
+}
+
+.es-resumen li {
+  display: grid;
+  grid-template-columns: 28px 1fr auto auto;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid #edf1f7;
+  font-size: 13px;
+}
+
+.es-resumen li:last-child {
+  border-bottom: none;
+}
+
+.es-resumen strong {
+  font-size: 16px;
+}
+
+.es-resumen-icono {
+  display: flex;
+}
+
+.es-resumen-icono.alto {
+  color: var(--high);
+}
+.es-resumen-icono.medio {
+  color: var(--medium-avatar);
+}
+.es-resumen-icono.bajo {
+  color: var(--low);
+}
+.es-resumen-icono.tasa {
+  color: var(--primary);
+}
+
+.es-delta {
+  min-width: 56px;
+  text-align: center;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.es-delta.verde {
+  background: #dcf3e3;
+  color: var(--low);
+}
+.es-delta.rojo {
+  background: #fbdcdc;
+  color: var(--high);
+}
+.es-delta.ambar {
+  background: #fbe8b5;
+  color: var(--medium);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1300px) {
+  .es-tarjetas {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  .es-fila,
+  .es-fila.es-ultima {
+  grid-template-columns: minmax(0, 1fr) 340px;
+  align-items: start;
+}
+
+.es-fila.es-ultima .an-panel {
+  min-width: 0;
+  overflow-x: auto;
+}
+
+.es-fila.es-ultima .an-tabla th,
+.es-fila.es-ultima .an-tabla td {
+  white-space: nowrap;
+}
+}
+
+/* ---------- Fila inferior: Últimos análisis + Resumen ---------- */
+.es-inferior {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 16px;
+  align-items: start;
+  margin-bottom: 16px;
+}
+
+.es-inferior .an-panel {
+  min-width: 0;
+  overflow-x: auto;
+}
+
+.es-inferior .an-tabla th,
+.es-inferior .an-tabla td {
+  white-space: nowrap;
+}
+
+@media (max-width: 1300px) {
+  .es-inferior {
+    grid-template-columns: 1fr;
+  }
+}
