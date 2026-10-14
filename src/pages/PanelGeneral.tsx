@@ -1,5 +1,4 @@
 import {
-  GraduationCap,
   Brain,
   Gauge,
   ChartColumn,
@@ -8,6 +7,7 @@ import {
   ShieldCheck,
   Target,
 } from 'lucide-react';
+import logo from "../assets/images/logo-proedu.png";
 import Header from '../components/Header';
 import { modelo } from '../data/analisis';
 import '../styles/panel.css';
@@ -80,10 +80,9 @@ export default function PanelGeneral() {
       <div className="pagina">
         <section className="pg-hero">
           <div className="pg-logo">
-            <GraduationCap size={64} />
+            <img src={logo} alt="Logo" />
           </div>
           <div>
-            <h2>ProEdu</h2>
             <p className="pg-tagline">
               Sistema inteligente para la detección de riesgo académico
             </p>
