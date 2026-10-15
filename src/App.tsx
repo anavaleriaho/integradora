@@ -11,6 +11,7 @@ import Reportes from './pages/Reportes';
 import Configuracion from './pages/Configuracion';
 import EnConstruccion from './pages/EnConstruccion';
 
+
 export default function App() {
   return (
     <BrowserRouter>
@@ -32,5 +33,6 @@ export default function App() {
         </Routes>
       </AuthProvider>
     </BrowserRouter>
+    
   );
 }
