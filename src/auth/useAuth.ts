@@ -1,14 +1,17 @@
 import { createContext, useContext } from 'react';
 
 export interface Usuario {
+  rol: 'personal' | 'alumno';
   nombre: string;
   cargo: string;
   correo: string;
+  matricula?: string;
 }
 
 export interface AuthContextValue {
   usuario: Usuario | null;
   iniciarSesion: (correo: string, contrasena: string) => boolean;
+  iniciarSesionAlumno: (matricula: string) => boolean;
   cerrarSesion: () => void;
 }
 

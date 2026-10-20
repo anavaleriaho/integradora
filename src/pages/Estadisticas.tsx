@@ -38,14 +38,14 @@ export default function Estadisticas() {
             titulo="Promedio general"
             valor={promedioGeneral}
             cambio={`↑ ${cambios.promedio}`}
-            descripcion="vs. semestre anterior"
+            descripcion="vs. cuatrimestre anterior"
           />
           <TarjetaIndicador
             icono={<Percent size={30} />}
             titulo="Asistencia promedio"
             valor={`${asistenciaPromedio}%`}
             cambio={`↑ ${cambios.asistencia}%`}
-            descripcion="vs. semestre anterior"
+            descripcion="vs. cuatrimestre anterior"
           />
           <TarjetaIndicador
             tipo="alerta"
@@ -54,7 +54,7 @@ export default function Estadisticas() {
             valor={totalReprobadas}
             cambio={`↓ ${Math.abs(cambios.reprobadas)}`}
             cambioMalo
-            descripcion="vs. semestre anterior"
+            descripcion="vs. cuatrimestre anterior"
           />
         </section>
 

@@ -37,7 +37,7 @@ export const encabezadosAlumnos = [
   'Alumno',
   'Matrícula',
   'Carrera',
-  'Semestre',
+  'Cuatrimestre',
   'Promedio',
   'Asistencia (%)',
   'Materias reprobadas',

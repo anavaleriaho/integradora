@@ -243,3 +243,38 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ---------- Etiquetas de la portada ---------- */
+.pg-pildoras {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.pg-pildora {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+}
+
+.pg-pildora.pronto {
+  border-style: dashed;
+}
+
+.pg-pildora em {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--primary);
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 700;
+}

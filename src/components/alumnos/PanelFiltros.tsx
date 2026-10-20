@@ -77,16 +77,16 @@ export default function PanelFiltros({
         ))}
       </select>
 
-      <h3 className="al-subtitulo">Semestre</h3>
+      <h3 className="al-subtitulo">Cuatrimestre</h3>
       <select
         className="al-select"
         value={filtros.semestre}
         onChange={(e) => onChange({ semestre: e.target.value })}
       >
-        <option value="todos">Todos los semestres</option>
+        <option value="todos">Todos los cuatrimestres</option>
         {semestres.map((s) => (
           <option key={s} value={s}>
-            Semestre {s}°
+            Cuatrimestre {s}°
           </option>
         ))}
       </select>

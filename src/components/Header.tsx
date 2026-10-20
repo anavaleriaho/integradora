@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { Bell, Calendar } from 'lucide-react';
+import { useAuth } from '../auth/useAuth';
 
 interface Props {
   titulo: string;
@@ -24,6 +25,8 @@ function formatearHora(d: Date) {
 }
 
 export default function Header({ titulo, subtitulo, icono }: Props) {
+  const { usuario } = useAuth();
+  const esAlumno = usuario?.rol === 'alumno';
   const [ahora, setAhora] = useState(new Date());
 
   useEffect(() => {
@@ -46,10 +49,12 @@ export default function Header({ titulo, subtitulo, icono }: Props) {
           <Bell size={24} />
         </div>
 
-        <div className="ia-estado">
-          <span className="punto-verde" />
-          IA activa
-        </div>
+        {!esAlumno && (
+          <div className="ia-estado">
+            <span className="punto-verde" />
+            IA activa
+          </div>
+        )}
 
         <div className="fecha">
           <Calendar size={24} />

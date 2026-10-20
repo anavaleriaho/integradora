@@ -1,53 +1,22 @@
 import {
+  GraduationCap,
   Brain,
-  Gauge,
-  ChartColumn,
-  Bell,
-  CalendarCheck,
-  ShieldCheck,
   Target,
+  CalendarCheck,
+  FileText,
+  UserCheck,
 } from 'lucide-react';
-import logo from "../assets/images/logo-proedu.png";
 import Header from '../components/Header';
 import { modelo } from '../data/analisis';
 import '../styles/panel.css';
 
-const funciones = [
+const pildoras = [
+  { icono: CalendarCheck, texto: 'Análisis diario con IA', pronto: false },
+  { icono: FileText, texto: 'Reportes en PDF, Excel y CSV', pronto: false },
   {
-    icono: Brain,
-    titulo: 'Detección con IA',
-    texto:
-      'Analiza calificaciones, asistencias, materias reprobadas, entregas y semestre para encontrar patrones de riesgo.',
-  },
-  {
-    icono: Gauge,
-    titulo: 'Semáforo de riesgo',
-    texto:
-      'Clasifica a cada estudiante en riesgo alto, medio o bajo para priorizar la atención.',
-  },
-  {
-    icono: ChartColumn,
-    titulo: 'Gráficas y patrones',
-    texto:
-      'Muestra la evolución del riesgo y los patrones detectados en gráficas y reportes.',
-  },
-  {
-    icono: Bell,
-    titulo: 'Alertas visuales',
-    texto:
-      'Identifica de inmediato a los alumnos que requieren atención del personal docente.',
-  },
-  {
-    icono: CalendarCheck,
-    titulo: 'Análisis diario',
-    texto:
-      'El modelo se ejecuta todos los días para detectar a tiempo las primeras señales de riesgo.',
-  },
-  {
-    icono: ShieldCheck,
-    titulo: 'Privacidad y seguridad',
-    texto:
-      'Cuida la información de los estudiantes y limita el acceso al personal autorizado.',
+    icono: UserCheck,
+    texto: 'Semáforo para el alumno con su matrícula',
+    pronto: true,
   },
 ];
 
@@ -80,9 +49,10 @@ export default function PanelGeneral() {
       <div className="pagina">
         <section className="pg-hero">
           <div className="pg-logo">
-            <img src={logo} alt="Logo" />
+            <GraduationCap size={64} />
           </div>
           <div>
+            <h2>ProEdu</h2>
             <p className="pg-tagline">
               Sistema inteligente para la detección de riesgo académico
             </p>
@@ -90,8 +60,25 @@ export default function PanelGeneral() {
               Plataforma web que utiliza inteligencia artificial para detectar
               diariamente a los estudiantes en riesgo de abandono, y ayudar al
               personal docente (tutores, psicólogos y trabajadores sociales) a
-              intervenir a tiempo.
+              intervenir a tiempo. Ademas permite generar reportes en PDF,
+              Excel y CSV como respaldo de los datos analizados,
             </p>
+
+            <div className="pg-pildoras">
+              {pildoras.map((p) => {
+                const Icono = p.icono;
+                return (
+                  <span
+                    key={p.texto}
+                    className={`pg-pildora ${p.pronto ? 'pronto' : ''}`}
+                  >
+                    <Icono size={16} />
+                    {p.texto}
+                    {p.pronto && <em>Próximamente</em>}
+                  </span>
+                );
+              })}
+            </div>
           </div>
         </section>
 
@@ -115,22 +102,6 @@ export default function PanelGeneral() {
               <small>en la detección de riesgo</small>
             </div>
           </div>
-        </section>
-
-        <h2 className="pg-titulo">¿Qué ofrece ProEdu?</h2>
-        <section className="pg-funciones">
-          {funciones.map((f) => {
-            const Icono = f.icono;
-            return (
-              <article key={f.titulo} className="pg-funcion">
-                <div className="pg-funcion-icono">
-                  <Icono size={26} />
-                </div>
-                <h3>{f.titulo}</h3>
-                <p>{f.texto}</p>
-              </article>
-            );
-          })}
         </section>
 
         <h2 className="pg-titulo">Cómo leer el semáforo de riesgo</h2>

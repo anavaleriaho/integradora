@@ -20,9 +20,7 @@ export default function Alertas() {
   const [semestre, setSemestre] = useState('todos');
 
   const carreras = [...new Set(alumnos.map((a) => a.carrera))];
-  const semestres = [...new Set(alumnos.map((a) => a.semestre))].sort(
-    (a, b) => a - b
-  );
+  const semestres = Array.from({ length: 12 }, (_, i) => i + 1);
 
   const contar = (n: NivelRiesgo) =>
     alumnos.filter((a) => a.riesgo === n).length;
@@ -119,10 +117,10 @@ export default function Alertas() {
           </select>
 
           <select value={semestre} onChange={(e) => setSemestre(e.target.value)}>
-            <option value="todos">Todos los semestres</option>
+            <option value="todos">Todos los cuatrimestres</option>
             {semestres.map((s) => (
               <option key={s} value={s}>
-                Semestre {s}°
+                Cuatrimestre {s}°
               </option>
             ))}
           </select>

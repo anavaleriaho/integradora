@@ -1,5 +1,6 @@
 import type { NivelRiesgo } from '../types';
 import { alumnos } from './alumnos';
+import { CARRERAS } from './carreras';
 import { evolucion } from './analisis';
 
 const redondear = (n: number) => Math.round(n * 10) / 10;
@@ -37,7 +38,7 @@ export const cambioRiesgo: Record<NivelRiesgo, number> = {
   bajo: hoy.bajo - ayer.bajo,
 };
 
-// ---------- Promedio por semestre (solo semestres con alumnos) ----------
+// ---------- Promedio por cuatrimestre (solo los que tienen alumnos) ----------
 export const promedioPorSemestre = [...new Set(alumnos.map((a) => a.semestre))]
   .sort((a, b) => a - b)
   .map((s) => ({
@@ -48,11 +49,15 @@ export const promedioPorSemestre = [...new Set(alumnos.map((a) => a.semestre))]
   }));
 
 // ---------- Promedio por carrera ----------
-const abreviar = (carrera: string) =>
-  carrera
-    .replace('Ingeniería en ', 'Ing. ')
-    .replace('Ingeniería ', 'Ing. ')
-    .replace('Administración de ', 'Adm. ');
+const abreviaturas: Record<string, string> = {
+  [CARRERAS.ti]: 'Ing. TI',
+  [CARRERAS.negocios]: 'Lic. Negocios',
+  [CARRERAS.mecatronica]: 'Ing. Mecatrónica',
+  [CARRERAS.logistica]: 'Ing. Logística',
+  [CARRERAS.agricultura]: 'Ing. Agricultura',
+};
+
+const abreviar = (carrera: string) => abreviaturas[carrera] ?? carrera;
 
 export const promedioPorCarrera = [...new Set(alumnos.map((a) => a.carrera))].map(
   (c) => ({
@@ -64,21 +69,21 @@ export const promedioPorCarrera = [...new Set(alumnos.map((a) => a.carrera))].ma
 );
 
 // ---------- Datos de ejemplo ----------
-// Promedian 77.6%, igual que la asistencia calculada de los alumnos
+// Promedian 76.9%, igual que la asistencia calculada de los alumnos
 export const asistenciaSemanal = [
   { dia: 'Lun', asistencia: 80 },
-  { dia: 'Mar', asistencia: 75 },
-  { dia: 'Mié', asistencia: 78 },
-  { dia: 'Jue', asistencia: 82 },
-  { dia: 'Vie', asistencia: 80 },
-  { dia: 'Sáb', asistencia: 76 },
-  { dia: 'Dom', asistencia: 72 },
+  { dia: 'Mar', asistencia: 74 },
+  { dia: 'Mié', asistencia: 77 },
+  { dia: 'Jue', asistencia: 80 },
+  { dia: 'Vie', asistencia: 78 },
+  { dia: 'Sáb', asistencia: 75 },
+  { dia: 'Dom', asistencia: 74 },
 ];
 
-// Deben sumar lo mismo que totalReprobadas (5)
+// Deben sumar lo mismo que totalReprobadas (7)
 export const reprobadasPorMateria = [
-  { materia: 'Matemáticas', reprobadas: 2 },
-  { materia: 'Programación', reprobadas: 1 },
+  { materia: 'Matemáticas', reprobadas: 3 },
+  { materia: 'Programación', reprobadas: 2 },
   { materia: 'Física', reprobadas: 1 },
   { materia: 'Inglés', reprobadas: 1 },
 ];

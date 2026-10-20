@@ -629,3 +629,63 @@ a.menu-item {
 .fecha {
   white-space: nowrap;
 }
+
+.filtros select {
+  max-width: 240px;
+}
+
+/* ---------- Nombre del usuario en el menú: recortar si es muy largo ---------- */
+.usuario-info {
+  min-width: 0;
+}
+
+.usuario-info strong,
+.usuario-info span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------- Alumno: Configuración abajo, encima del perfil ---------- */
+.menu-abajo {
+  margin-top: auto;
+}
+
+/* ---------- Nombre del usuario: hasta 2 líneas en vez de cortarse ---------- */
+.usuario-info strong {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  white-space: normal;
+  line-height: 1.3;
+}
+
+/* ---------- Logo del menú: fijar el tamaño del diseño original ---------- */
+.sidebar .logo {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  height: auto;
+  padding: 0 8px;
+  margin-bottom: 32px;
+  filter: none;
+  transition: none;
+}
+
+.sidebar .logo-icono {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: var(--primary);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.sidebar .logo span {
+  font-size: 22px;
+  font-weight: 700;
+}

@@ -6,12 +6,13 @@ import {
   Users,
   ChartColumn,
   FileText,
+  Gauge,
   Settings,
+  GraduationCap,
 } from 'lucide-react';
-import logo from "../assets/images/logo-proedu.png";
 import { useAuth } from '../auth/useAuth';
 
-const menu = [
+const menuPersonal = [
   { nombre: 'Panel General', icono: House, ruta: '/panel' },
   { nombre: 'Alertas', icono: Bell, ruta: '/alertas' },
   { nombre: 'Análisis IA', icono: Brain, ruta: '/analisis' },
@@ -20,17 +21,30 @@ const menu = [
   { nombre: 'Reportes', icono: FileText, ruta: '/reportes' },
 ];
 
+const menuAlumno = [{ nombre: 'Mi semáforo', icono: Gauge, ruta: '/mi-semaforo' }];
+
 export default function Sidebar() {
   const { usuario } = useAuth();
+  const esAlumno = usuario?.rol === 'alumno';
+  const menu = esAlumno ? menuAlumno : menuPersonal;
+  const rutaConfiguracion = esAlumno ? '/mi-configuracion' : '/configuracion';
+
   const nombre = usuario?.nombre ?? '';
   const cargo = usuario?.cargo ?? '';
+  const iniciales = nombre
+    .split(' ')
+    .slice(0, 2)
+    .map((palabra) => palabra[0])
+    .join('')
+    .toUpperCase();
 
   return (
     <aside className="sidebar">
       <div className="logo">
         <div className="logo-icono">
-          <img src={logo} alt="Logo" />
+          <GraduationCap size={26} />
         </div>
+        <span>ProEdu</span>
       </div>
 
       <nav className="menu">
@@ -50,10 +64,10 @@ export default function Sidebar() {
           );
         })}
 
-        <div className="menu-separador" />
+        <div className={`menu-separador ${esAlumno ? 'menu-abajo' : ''}`} />
 
         <NavLink
-          to="/configuracion"
+          to={rutaConfiguracion}
           className={({ isActive }) => `menu-item ${isActive ? 'activo' : ''}`}
         >
           <Settings size={20} />
@@ -62,9 +76,7 @@ export default function Sidebar() {
       </nav>
 
       <div className="usuario">
-        <div className="usuario-avatar">
-          {nombre.slice(0, 2).toUpperCase()}
-        </div>
+        <div className="usuario-avatar">{iniciales}</div>
         <div className="usuario-info">
           <strong>{nombre}</strong>
           <span>{cargo}</span>

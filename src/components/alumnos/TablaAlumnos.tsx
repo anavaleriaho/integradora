@@ -70,7 +70,7 @@ export default function TablaAlumnos({
               </th>
               <th>Alumno</th>
               <th>Carrera</th>
-              <th>Semestre</th>
+              <th>Cuatrimestre</th>
               <th>Promedio</th>
               <th>Asistencia</th>
               <th>Riesgo</th>

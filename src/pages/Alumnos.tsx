@@ -37,9 +37,7 @@ export default function Alumnos() {
     ((contar(n) / total) * 100).toFixed(1);
 
   const carreras = [...new Set(alumnos.map((a) => a.carrera))];
-  const semestres = [...new Set(alumnos.map((a) => a.semestre))].sort(
-    (a, b) => a - b
-  );
+  const semestres = Array.from({ length: 12 }, (_, i) => i + 1);
 
   const filtrados = alumnos.filter((a) => {
     const texto = filtros.busqueda.toLowerCase();
@@ -181,10 +179,10 @@ export default function Alumnos() {
             value={filtros.semestre}
             onChange={(e) => cambiarFiltros({ semestre: e.target.value })}
           >
-            <option value="todos">Todos los semestres</option>
+            <option value="todos">Todos los cuatrimestres</option>
             {semestres.map((s) => (
               <option key={s} value={s}>
-                Semestre {s}°
+                Cuatrimestre {s}°
               </option>
             ))}
           </select>

@@ -24,7 +24,7 @@ export default function AlumnoCard({ alumno }: Props) {
           <h3>{alumno.nombre}</h3>
           <p>Matrícula: {alumno.matricula}</p>
           <p>{alumno.carrera}</p>
-          <p>Semestre: {alumno.semestre}°</p>
+          <p>Cuatrimestre: {alumno.semestre}°</p>
         </div>
       </div>
 
@@ -53,7 +53,7 @@ export default function AlumnoCard({ alumno }: Props) {
         </div>
         <div>
           <GraduationCap size={16} /> <span>Promedio</span>
-          <strong>{alumno.promedio}</strong>
+          <strong>{alumno.promedio.toFixed(1)}</strong>
         </div>
         <div>
           <FileText size={16} /> <span>Reprobadas</span>

@@ -12,7 +12,7 @@ import { promedioPorSemestre } from '../../data/estadisticas';
 
 export default function RendimientoSemestre() {
   return (
-    <PanelGrafica titulo="Rendimiento académico" subtitulo="Promedio por semestre">
+    <PanelGrafica titulo="Rendimiento académico" subtitulo="Promedio por cuatrimestre">
       <ResponsiveContainer width="100%" height={240}>
         <AreaChart
           data={promedioPorSemestre}

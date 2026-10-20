@@ -1,12 +1,13 @@
 import type { Alumno } from '../types';
+import { CARRERAS } from './carreras';
 
 export const alumnos: Alumno[] = [
   {
     id: 1,
-    nombre: 'Pedro Pérez García',
-    matricula: '2025-00123',
-    carrera: 'Ingeniería Software',
-    semestre: 4,
+    nombre: 'Carlos Alberto Cisneros',
+    matricula: '2024-00123',
+    carrera: CARRERAS.ti,
+    semestre: 7,
     riesgo: 'alto',
     probabilidad: 82,
     factores: [
@@ -21,10 +22,10 @@ export const alumnos: Alumno[] = [
   },
   {
     id: 2,
-    nombre: 'María González López',
+    nombre: 'Ana Valeria Herrera Ontiveros',
     matricula: '2025-00456',
-    carrera: 'Administración de Empresas',
-    semestre: 3,
+    carrera: CARRERAS.negocios,
+    semestre: 4,
     riesgo: 'medio',
     probabilidad: 63,
     factores: [
@@ -39,10 +40,10 @@ export const alumnos: Alumno[] = [
   },
   {
     id: 3,
-    nombre: 'Ana Castillo Torres',
-    matricula: '2025-00789',
-    carrera: 'Psicología',
-    semestre: 5,
+    nombre: 'Paola Michell Luna Serrano',
+    matricula: '2023-00789',
+    carrera: CARRERAS.mecatronica,
+    semestre: 10,
     riesgo: 'medio',
     probabilidad: 58,
     factores: [
@@ -57,10 +58,10 @@ export const alumnos: Alumno[] = [
   },
   {
     id: 4,
-    nombre: 'Luis Ramírez Silva',
+    nombre: 'Jeremy Alejandro Martínez Castor',
     matricula: '2025-01011',
-    carrera: 'Ingeniería Civil',
-    semestre: 2,
+    carrera: CARRERAS.logistica,
+    semestre: 5,
     riesgo: 'bajo',
     probabilidad: 42,
     factores: [
@@ -75,9 +76,9 @@ export const alumnos: Alumno[] = [
   },
   {
     id: 5,
-    nombre: 'Elena Sánchez Ruiz',
-    matricula: '2025-01122',
-    carrera: 'Informática',
+    nombre: 'Steven Ramcés Morones Bayona',
+    matricula: '2026-01122',
+    carrera: CARRERAS.agricultura,
     semestre: 3,
     riesgo: 'bajo',
     probabilidad: 38,
@@ -90,5 +91,41 @@ export const alumnos: Alumno[] = [
     asistencia: 88,
     promedio: 8.5,
     reprobadas: 0,
+  },
+  {
+    id: 6,
+    nombre: 'Diego Emmanuel Rojas Nevárez',
+    matricula: '2025-01289',
+    carrera: CARRERAS.mecatronica,
+    semestre: 6,
+    riesgo: 'bajo',
+    probabilidad: 31,
+    factores: [
+      'Asistencia excelente (92%)',
+      'Promedio sobresaliente (9.0)',
+      'Sin materias reprobadas',
+      'Entregas en tiempo',
+    ],
+    asistencia: 92,
+    promedio: 9.0,
+    reprobadas: 0,
+  },
+  {
+    id: 7,
+    nombre: 'Diego Armando Roldan Galindo',
+    matricula: '2026-01567',
+    carrera: CARRERAS.negocios,
+    semestre: 1,
+    riesgo: 'alto',
+    probabilidad: 78,
+    factores: [
+      'Baja asistencia (58%)',
+      'Promedio bajo (5.9)',
+      '2 materias reprobadas',
+      'Retraso en entregas',
+    ],
+    asistencia: 58,
+    promedio: 5.9,
+    reprobadas: 2,
   },
 ];

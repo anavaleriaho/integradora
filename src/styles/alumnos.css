@@ -454,3 +454,7 @@
     grid-template-columns: 1fr;
   }
 }
+
+.al-toolbar .al-select {
+  max-width: 240px;
+}

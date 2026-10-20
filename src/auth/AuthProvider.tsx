@@ -6,13 +6,33 @@ import {
   usuarioEjemplo,
   correoEjemplo,
   contrasenaEjemplo,
+  buscarAlumno,
+  usuarioDeAlumno,
 } from '../data/usuario';
 
 const CLAVE = 'proedu-sesion';
 
+function guardar(valor: string | null) {
+  try {
+    if (valor) sessionStorage.setItem(CLAVE, valor);
+    else sessionStorage.removeItem(CLAVE);
+  } catch {
+    // sin almacenamiento disponible, la sesión dura mientras no se recargue
+  }
+}
+
 function leerSesion(): Usuario | null {
   try {
-    return sessionStorage.getItem(CLAVE) ? usuarioEjemplo : null;
+    const texto = sessionStorage.getItem(CLAVE);
+    if (!texto) return null;
+
+    const datos = JSON.parse(texto) as { rol?: string; matricula?: string };
+    if (datos.rol === 'personal') return usuarioEjemplo;
+    if (datos.rol === 'alumno' && datos.matricula) {
+      const alumno = buscarAlumno(datos.matricula);
+      return alumno ? usuarioDeAlumno(alumno) : null;
+    }
+    return null;
   } catch {
     return null;
   }
@@ -32,26 +52,29 @@ export default function AuthProvider({ children }: Props) {
 
     if (correcto) {
       setUsuario(usuarioEjemplo);
-      try {
-        sessionStorage.setItem(CLAVE, '1');
-      } catch {
-        // si el navegador no permite guardar, la sesión dura mientras no se recargue
-      }
+      guardar(JSON.stringify({ rol: 'personal' }));
     }
     return correcto;
   };
 
+  const iniciarSesionAlumno = (matricula: string) => {
+    const alumno = buscarAlumno(matricula);
+    if (!alumno) return false;
+
+    setUsuario(usuarioDeAlumno(alumno));
+    guardar(JSON.stringify({ rol: 'alumno', matricula: alumno.matricula }));
+    return true;
+  };
+
   const cerrarSesion = () => {
     setUsuario(null);
-    try {
-      sessionStorage.removeItem(CLAVE);
-    } catch {
-      // sin almacenamiento disponible no hay nada que borrar
-    }
+    guardar(null);
   };
 
   return (
-    <AuthContext.Provider value={{ usuario, iniciarSesion, cerrarSesion }}>
+    <AuthContext.Provider
+      value={{ usuario, iniciarSesion, iniciarSesionAlumno, cerrarSesion }}
+    >
       {children}
     </AuthContext.Provider>
   );

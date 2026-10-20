@@ -9,8 +9,9 @@ import Alumnos from './pages/Alumnos';
 import Estadisticas from './pages/Estadisticas';
 import Reportes from './pages/Reportes';
 import Configuracion from './pages/Configuracion';
+import MiSemaforo from './pages/MiSemaforo';
+import ConfiguracionAlumno from './pages/ConfiguracionAlumno';
 import EnConstruccion from './pages/EnConstruccion';
-
 
 export default function App() {
   return (
@@ -19,7 +20,14 @@ export default function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
 
-          <Route element={<RutaProtegida />}>
+          {/* Pantallas del alumno */}
+          <Route element={<RutaProtegida rol="alumno" />}>
+            <Route path="/mi-semaforo" element={<MiSemaforo />} />
+            <Route path="/mi-configuracion" element={<ConfiguracionAlumno />} />
+          </Route>
+
+          {/* Pantallas del personal docente */}
+          <Route element={<RutaProtegida rol="personal" />}>
             <Route path="/" element={<Navigate to="/panel" replace />} />
             <Route path="/panel" element={<PanelGeneral />} />
             <Route path="/alertas" element={<Alertas />} />
@@ -33,6 +41,5 @@ export default function App() {
         </Routes>
       </AuthProvider>
     </BrowserRouter>
-    
   );
 }

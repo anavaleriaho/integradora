@@ -308,3 +308,59 @@
     display: none;
   }
 }
+
+/* ---------- Pestañas Personal docente / Alumno ---------- */
+.lg-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 4px;
+  margin-bottom: 24px;
+  background: #eef3fa;
+  border-radius: 12px;
+}
+
+.lg-tab {
+  padding: 10px;
+  border: none;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.lg-tab.activa {
+  background: #fff;
+  color: var(--primary);
+  box-shadow: 0 2px 8px rgba(17, 59, 122, 0.12);
+}
+
+.lg-tab:disabled {
+  cursor: wait;
+}
+
+/* ---------- Matrículas de ejemplo ---------- */
+.lg-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.lg-demo .lg-chips button {
+  margin-top: 0;
+  padding: 4px 10px;
+  border: 1px solid #c9daf6;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.lg-demo .lg-chips button:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}

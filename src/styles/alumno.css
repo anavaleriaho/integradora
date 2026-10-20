@@ -1,0 +1,264 @@
+/* ===== Vista del alumno ===== */
+
+.ms-vacio {
+  padding: 40px;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+/* ---------- Saludo ---------- */
+.ms-saludo {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 22px 24px;
+  margin-bottom: 16px;
+  background: var(--card);
+  border: 1px solid #dbe6f5;
+  border-radius: 14px;
+}
+
+.ms-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.ms-saludo h2 {
+  font-size: 22px;
+}
+
+.ms-saludo p {
+  margin-top: 2px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* ---------- Filas ---------- */
+.ms-fila {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.ms-fila.dos {
+  grid-template-columns: 1fr 1fr;
+}
+
+/* ---------- Semáforo ---------- */
+.ms-semaforo {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  padding: 28px;
+  border-radius: 14px;
+  border: 1px solid;
+}
+
+.ms-semaforo.alto {
+  background: var(--high-bg);
+  border-color: #f8d0d0;
+}
+.ms-semaforo.medio {
+  background: var(--medium-bg);
+  border-color: #f6e3ae;
+}
+.ms-semaforo.bajo {
+  background: var(--low-bg);
+  border-color: #c9e8d2;
+}
+
+.ms-luces {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 14px;
+  border-radius: 40px;
+  background: #1e293b;
+  flex-shrink: 0;
+}
+
+.ms-luz {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  opacity: 0.2;
+  transition: opacity 0.3s;
+}
+
+.ms-luz.alto {
+  background: #ef4444;
+}
+.ms-luz.medio {
+  background: #f59e0b;
+}
+.ms-luz.bajo {
+  background: #22c55e;
+}
+
+.ms-luz.encendida {
+  opacity: 1;
+  animation: ms-pulso 2.4s ease-in-out infinite;
+}
+
+.ms-luz.alto.encendida {
+  box-shadow: 0 0 24px 4px rgba(239, 68, 68, 0.6);
+}
+.ms-luz.medio.encendida {
+  box-shadow: 0 0 24px 4px rgba(245, 158, 11, 0.6);
+}
+.ms-luz.bajo.encendida {
+  box-shadow: 0 0 24px 4px rgba(34, 197, 94, 0.6);
+}
+
+@keyframes ms-pulso {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ms-luz.encendida {
+    animation: none;
+  }
+}
+
+.ms-nivel {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.ms-semaforo.alto .ms-nivel {
+  color: var(--high);
+}
+.ms-semaforo.medio .ms-nivel {
+  color: var(--medium);
+}
+.ms-semaforo.bajo .ms-nivel {
+  color: var(--low);
+}
+
+.ms-semaforo h2 {
+  margin: 6px 0 10px;
+  font-size: 26px;
+}
+
+.ms-texto {
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+/* ---------- Paneles ---------- */
+.ms-panel {
+  padding: 22px;
+  background: var(--card);
+  border: 1px solid #dbe6f5;
+  border-radius: 14px;
+}
+
+.ms-panel h3 {
+  margin-bottom: 14px;
+  font-size: 17px;
+}
+
+.ms-indicadores {
+  list-style: none;
+}
+
+.ms-indicadores li {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid #edf1f7;
+  font-size: 14px;
+}
+
+.ms-indicadores li:last-child {
+  border-bottom: none;
+}
+
+.ms-indicadores strong {
+  font-size: 22px;
+}
+
+.ms-ind-icono {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--info-bg);
+  color: var(--primary);
+  display: grid;
+  place-items: center;
+}
+
+.ms-lista {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ms-lista li {
+  display: flex;
+  gap: 10px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.ms-lista li::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  margin-top: 8px;
+  border-radius: 50%;
+  background: var(--primary);
+  flex-shrink: 0;
+}
+
+.ms-lista.alto li::before {
+  background: var(--high-avatar);
+}
+.ms-lista.medio li::before {
+  background: var(--medium-avatar);
+}
+.ms-lista.bajo li::before {
+  background: var(--low-avatar);
+}
+
+/* ---------- Datos en solo lectura (Configuración del alumno) ---------- */
+.cf-campo input[readonly] {
+  background: #f4f8fd;
+  color: var(--text-muted);
+  cursor: default;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1100px) {
+  .ms-fila,
+  .ms-fila.dos {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .ms-semaforo {
+    flex-direction: column;
+    text-align: center;
+  }
+}
