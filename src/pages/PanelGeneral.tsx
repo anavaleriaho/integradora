@@ -6,6 +6,7 @@ import {
   FileText,
   UserCheck,
 } from 'lucide-react';
+import logo from "../assets/images/logo-proedu.png";
 import Header from '../components/Header';
 import { modelo } from '../data/analisis';
 import '../styles/panel.css';
@@ -43,16 +44,16 @@ export default function PanelGeneral() {
     <>
       <Header
         titulo="Panel General"
-        subtitulo="Información general sobre la plataforma ProEdu."
+        subtitulo="Información general sobre la plataforma proedu."
       />
 
       <div className="pagina">
         <section className="pg-hero">
           <div className="pg-logo">
-            <GraduationCap size={64} />
+            <img src={logo} alt="Logo de ProEdu" />
           </div>
           <div>
-            <h2>ProEdu</h2>
+            <h2>proedu</h2>
             <p className="pg-tagline">
               Sistema inteligente para la detección de riesgo académico
             </p>
@@ -74,7 +75,6 @@ export default function PanelGeneral() {
                   >
                     <Icono size={16} />
                     {p.texto}
-                    {p.pronto && <em>Próximamente</em>}
                   </span>
                 );
               })}

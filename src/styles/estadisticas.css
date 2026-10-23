@@ -1,5 +1,43 @@
 /* ===== Pantalla Estadísticas ===== */
-
+.es-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 16px;
+  padding: 16px 20px;
+  background: #fff;
+  border-radius: 12px;
+}
+.es-filtros-titulo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  width: 100%;
+}
+.es-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 180px;
+  font-size: 14px;
+}
+.es-campo select {
+  padding: 8px 10px;
+  border: 1px solid #d0d5dd;
+  border-radius: 8px;
+}
+.es-filtros-acciones,
+.es-reportes-botones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.es-filtro-actual {
+  margin: 12px 0;
+  font-size: 14px;
+}
 /* ---------- Tarjetas superiores ---------- */
 .es-tarjetas {
   display: grid;

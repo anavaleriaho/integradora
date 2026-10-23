@@ -2,7 +2,6 @@ import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { Navigate } from 'react-router-dom';
 import {
-  GraduationCap,
   Mail,
   Lock,
   User,
@@ -13,6 +12,7 @@ import {
   Gauge,
   ShieldCheck,
 } from 'lucide-react';
+import logo from "../assets/images/logo-proedu.png";
 import { useAuth } from '../auth/useAuth';
 import { correoEjemplo, contrasenaEjemplo } from '../data/usuario';
 import { alumnos } from '../data/alumnos';
@@ -93,9 +93,9 @@ export default function Login() {
 
         <div className="lg-marca-contenido">
           <div className="lg-logo">
-            <GraduationCap size={64} />
+            <img src={logo} alt="Logo" />
           </div>
-          <h1>ProEdu</h1>
+          <p>Detección temprana para un futuro seguro </p>
           <p className="lg-tagline">
             Sistema inteligente para la detección de riesgo académico
           </p>
