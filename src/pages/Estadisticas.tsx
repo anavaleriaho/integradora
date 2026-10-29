@@ -305,74 +305,120 @@ export default function Estadisticas() {
       />
 
       <div className="pagina">
-        {/* ───── Filtros ───── */}
-        <form className="es-filtros" onSubmit={aplicar}>
-          <div className="es-filtros-titulo">
-            <Filter size={18} />
-            Filtros
-          </div>
+        {/* ───── Filtros y generación de reportes ───── */}
+<section className="es-controles">
+  <form className="es-filtros" onSubmit={aplicar}>
+    <div className="es-filtros-titulo">
+      <Filter size={18} />
+      Filtros
+    </div>
 
-          <label className="es-campo">
-            <span>Carrera</span>
-            <select
-              value={borrador.carrera}
-              onChange={(e) => cambiarCampo('carrera', e.target.value)}
-            >
-              <option value="">Todas las carreras</option>
-              {carreras.map((c) => (
-                <option key={c.valor} value={c.valor}>
-                  {c.etiqueta}
-                </option>
-              ))}
-            </select>
-          </label>
+    <div className="es-filtros-campos">
+      <label className="es-campo">
+        <span>Carrera</span>
+        <select
+          value={borrador.carrera}
+          onChange={(e) => cambiarCampo('carrera', e.target.value)}
+        >
+          <option value="">Todas las carreras</option>
+          {carreras.map((c) => (
+            <option key={c.valor} value={c.valor}>
+              {c.etiqueta}
+            </option>
+          ))}
+        </select>
+      </label>
 
-          <label className="es-campo">
-            <span>Grupo</span>
-            <select
-              value={borrador.grupo}
-              onChange={(e) => cambiarCampo('grupo', e.target.value)}
-            >
-              <option value="">Todos los grupos</option>
-              {grupos.map((g) => (
-                <option key={g.valor} value={g.valor}>
-                  {g.etiqueta}
-                </option>
-              ))}
-            </select>
-          </label>
+      <label className="es-campo">
+        <span>Grupo</span>
+        <select
+          value={borrador.grupo}
+          onChange={(e) => cambiarCampo('grupo', e.target.value)}
+        >
+          <option value="">Todos los grupos</option>
+          {grupos.map((g) => (
+            <option key={g.valor} value={g.valor}>
+              {g.etiqueta}
+            </option>
+          ))}
+        </select>
+      </label>
 
-          <label className="es-campo">
-            <span>Cuatrimestre</span>
-            <select
-              value={borrador.cuatrimestre}
-              onChange={(e) => cambiarCampo('cuatrimestre', e.target.value)}
-            >
-              <option value="">Todos los cuatrimestres</option>
-              {cuatrimestres.map((c) => (
-                <option key={c.valor} value={c.valor}>
-                  {c.etiqueta}
-                </option>
-              ))}
-            </select>
-          </label>
+      <label className="es-campo">
+        <span>Cuatrimestre</span>
+        <select
+          value={borrador.cuatrimestre}
+          onChange={(e) => cambiarCampo('cuatrimestre', e.target.value)}
+        >
+          <option value="">Todos los cuatrimestres</option>
+          {cuatrimestres.map((c) => (
+            <option key={c.valor} value={c.valor}>
+              {c.etiqueta}
+            </option>
+          ))}
+        </select>
+      </label>
+    </div>
 
-          <div className="es-filtros-acciones">
-            <button type="submit" className="rp-btn" disabled={cargando}>
-              <Filter size={16} />
-              {cargando ? 'Cargando...' : 'Aplicar filtros'}
-            </button>
-            <button type="button" className="rp-btn" onClick={limpiar}>
-              <RotateCcw size={16} />
-              Limpiar
-            </button>
-          </div>
-        </form>
+    <div className="es-filtros-acciones">
+      <button type="submit" className="rp-btn" disabled={cargando}>
+        <Filter size={16} />
+        {cargando ? 'Cargando...' : 'Aplicar filtros'}
+      </button>
+      <button type="button" className="rp-btn es-btn-sec" onClick={limpiar}>
+        <RotateCcw size={16} />
+        Limpiar
+      </button>
+    </div>
+  </form>
 
-        <p className="es-filtro-actual">
-          Mostrando: <strong>{descripcionFiltros(filtros, carreras)}</strong>
-          {usandoEstaticos && ' (datos de ejemplo)'}
-        </p>
+  <div className="es-reporte">
+    <div className="es-filtros-titulo">
+      <FileText size={18} />
+      Generar reporte
+    </div>
+
+    <p className="es-nota">
+      Se genera con el filtro aplicado:{' '}
+      <strong>{descripcionFiltros(filtros, carreras)}</strong>
+    </p>
+
+    {mensaje && (
+      <div className={`rp-mensaje ${mensaje.tipo}`} role="status">
+        {mensaje.tipo === 'ok' ? (
+          <Check size={18} />
+        ) : (
+          <TriangleAlert size={18} />
+        )}
+        {mensaje.texto}
+      </div>
+    )}
+
+    <div className="es-reportes-botones">
+      {formatos.map((f) => {
+        const Icono = f.icono;
+        const ocupado = generando === f.clave;
+        return (
+          <button
+            key={f.clave}
+            className="rp-btn"
+            onClick={() => generar(f)}
+            disabled={generando !== null}
+          >
+            <Icono size={18} />
+            <Download size={16} />
+            {ocupado ? 'Generando...' : f.boton}
+          </button>
+        );
+      })}
+    </div>
+  </div>
+</section>
+
+<p className="es-filtro-actual">
+  Mostrando: <strong>{descripcionFiltros(filtros, carreras)}</strong>
+  {usandoEstaticos && ' (datos de ejemplo)'}
+</p>
 
         {/* ───── Indicadores ───── */}
         <section className="es-tarjetas">
@@ -422,43 +468,10 @@ export default function Estadisticas() {
           <ResumenGeneral />
         </div>
 
-        {/* ───── Reportes ───── */}
-        <section className="rp-incluye">
-          <h2>
-            <FileText size={20} />
-            Generar reporte
-          </h2>
-          <p className="rp-nota">
-            El reporte se genera con el filtro seleccionado:{' '}
-            <strong>{descripcionFiltros(filtros, carreras)}</strong>
-          </p>
-
-          {mensaje && (
-            <div className={`rp-mensaje ${mensaje.tipo}`} role="status">
-              {mensaje.tipo === 'ok' ? <Check size={18} /> : <TriangleAlert size={18} />}
-              {mensaje.texto}
-            </div>
-          )}
-
-          <div className="es-reportes-botones">
-            {formatos.map((f) => {
-              const Icono = f.icono;
-              const ocupado = generando === f.clave;
-              return (
-                <button
-                  key={f.clave}
-                  className="rp-btn"
-                  onClick={() => generar(f)}
-                  disabled={generando !== null}
-                >
-                  <Icono size={18} />
-                  <Download size={16} />
-                  {ocupado ? 'Generando...' : f.boton}
-                </button>
-              );
-            })}
-          </div>
-        </section>
+                <div className="es-inferior">
+          <UltimosAnalisis />
+          <ResumenGeneral />
+        </div>
       </div>
     </>
   );

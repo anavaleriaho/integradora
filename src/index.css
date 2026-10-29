@@ -395,7 +395,7 @@ select {
 
 .alumno-card {
   display: grid;
-  grid-template-columns: 2.2fr 1.3fr 2.4fr 1.6fr auto;
+  grid-template-columns: 2.2fr 1.3fr 2.4fr 1.6fr;
   align-items: center;
   gap: 20px;
   padding: 18px 20px;
@@ -688,4 +688,17 @@ a.menu-item {
 .sidebar .logo span {
   font-size: 22px;
   font-weight: 700;
+}
+
+/* ---------- Logo de ProEdu en el menú lateral ---------- */
+.sidebar .logo {
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.sidebar .logo-imagen {
+  width: 180px;
+  height: 180px;
+  margin: -34px 0;
+  object-fit: contain;
 }
