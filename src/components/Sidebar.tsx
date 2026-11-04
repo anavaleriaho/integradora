@@ -8,8 +8,8 @@ import {
   FileText,
   Gauge,
   Settings,
-  GraduationCap,
 } from 'lucide-react';
+import logo from "../assets/images/logo-proedu.png";
 import { useAuth } from '../auth/useAuth';
 
 const menuPersonal = [
@@ -42,9 +42,9 @@ export default function Sidebar() {
     <aside className="sidebar">
       <div className="logo">
         <div className="logo-icono">
-          <GraduationCap size={26} />
+          <img src={logo} alt="Logo de ProEdu" />
         </div>
-        <span>ProEdu</span>
+        <span>proedu</span>
       </div>
 
       <nav className="menu">

@@ -42,7 +42,7 @@ import '../styles/reportes.css';
 const API_URL: string = import.meta.env.VITE_API_URL ?? 'http://localhost:8000';
 
 // Ajusta estas rutas a las de tu backend FastAPI
-const ENDPOINTS = {
+const ENDPOINTS = { 
   estadisticas: '/estadisticas',
   carreras: '/carreras',
   grupos: '/grupos',
@@ -56,12 +56,12 @@ interface Filtros {
   cuatrimestre: string; // '' = todos
 }
 
-interface Opcion {
+interface Opcion { 
   valor: string;
   etiqueta: string;
 }
 
-interface DatosEstadisticas {
+interface DatosEstadisticas { 
   totalAlumnos: number;
   promedioGeneral: number;
   asistenciaPromedio: number;
@@ -90,9 +90,11 @@ const datosEstaticos: DatosEstadisticas = {
 
 // Se usan solo si la API no responde todavía
 const carrerasEstaticas: Opcion[] = [
-  { valor: '1', etiqueta: 'Ingeniería en Software' },
-  { valor: '2', etiqueta: 'Ingeniería Industrial' },
-  { valor: '3', etiqueta: 'Administración' },
+  { valor: '1', etiqueta: 'Ingeniería en Desarrollo de Software' },
+  { valor: '2', etiqueta: 'Ingeniería en Mecatronica' },
+  { valor: '3', etiqueta: 'Ingeniería en Agricultura Sustentable y Protegida' },
+  { valor: '4', etiqueta: 'Licenciatura en Innavción de Negocios y Mercadotecnia' },
+  { valor: '5', etiqueta: 'Ingeniería en Logística Internacional' },
 ];
 const gruposEstaticos: Opcion[] = ['A', 'B', 'C'].map((g) => ({
   valor: g,
