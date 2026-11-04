@@ -5,7 +5,6 @@ import {
   Brain,
   Users,
   ChartColumn,
-  FileText,
   Gauge,
   Settings,
 } from 'lucide-react';
@@ -18,7 +17,6 @@ const menuPersonal = [
   { nombre: 'Análisis IA', icono: Brain, ruta: '/analisis' },
   { nombre: 'Alumnos', icono: Users, ruta: '/alumnos' },
   { nombre: 'Estadísticas', icono: ChartColumn, ruta: '/estadisticas' },
-  { nombre: 'Reportes', icono: FileText, ruta: '/reportes' },
 ];
 
 const menuAlumno = [{ nombre: 'Mi semáforo', icono: Gauge, ruta: '/mi-semaforo' }];
@@ -41,10 +39,7 @@ export default function Sidebar() {
   return (
     <aside className="sidebar">
       <div className="logo">
-        <div className="logo-icono">
-          <img src={logo} alt="Logo de ProEdu" />
-        </div>
-        <span>proedu</span>
+        <img className="logo-imagen" src={logo} alt="ProEdu" />
       </div>
 
       <nav className="menu">

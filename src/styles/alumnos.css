@@ -458,3 +458,329 @@
 .al-toolbar .al-select {
   max-width: 240px;
 }
+
+/* ---------- Menú de los tres puntos ---------- */
+.al-menu {
+  position: fixed;
+  z-index: 50;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid #dbe6f5;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.15);
+}
+
+.al-menu button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 8px;
+  background: none;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+}
+
+.al-menu button svg {
+  color: var(--primary);
+}
+
+.al-menu button:hover {
+  background: #f1f6fc;
+}
+
+.al-menu button.peligro,
+.al-menu button.peligro svg {
+  color: var(--high);
+}
+
+.al-menu button.peligro:hover {
+  background: var(--high-bg);
+}
+
+/* ---------- Ventanas flotantes ---------- */
+.al-modal-fondo {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(3px);
+  animation: al-fondo-aparecer 0.2s ease both;
+}
+
+.al-modal {
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--card);
+  border: 1px solid #dbe6f5;
+  border-radius: 16px;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.35);
+  animation: al-modal-aparecer 0.25s ease both;
+}
+
+.al-modal-cabecera {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 24px;
+  border-bottom: 1px solid #edf1f7;
+}
+
+.al-modal-icono {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.al-modal-icono.azul {
+  background: #dbe9fd;
+  color: var(--primary);
+}
+
+.al-modal-icono.rojo {
+  background: #f9cdcd;
+  color: var(--high);
+}
+
+.al-modal-icono.verde {
+  background: #c5e9cf;
+  color: var(--low);
+}
+
+.al-modal-titulos {
+  flex: 1;
+  min-width: 0;
+}
+
+.al-modal-titulos h2 {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.al-modal-titulos p {
+  margin-top: 2px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.al-modal-cerrar {
+  display: flex;
+  align-self: flex-start;
+  padding: 6px;
+  border: none;
+  border-radius: 8px;
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.al-modal-cerrar:hover {
+  background: #f1f6fc;
+  color: var(--text);
+}
+
+.al-modal-cuerpo {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 24px;
+  overflow-y: auto;
+}
+
+.al-modal-ficha {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: #f1f6fc;
+  border-radius: 12px;
+}
+
+.al-modal-ficha-datos {
+  flex: 1;
+  min-width: 0;
+}
+
+.al-modal-ficha-datos strong {
+  display: block;
+  font-size: 14px;
+}
+
+.al-modal-ficha-datos span {
+  display: block;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.al-materias {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.al-materias li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--high-bg);
+  border: 1px solid #f8d0d0;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.al-materias small {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #f9d3d3;
+  color: var(--high);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.al-modal-vacio {
+  padding: 18px;
+  text-align: center;
+  background: var(--low-bg);
+  border: 1px solid #c9e8d2;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--low);
+}
+
+.al-modal-texto {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text);
+}
+
+.al-modal-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.al-modal-campo input {
+  padding: 12px 14px;
+  border: 1px solid #dbe4f0;
+  border-radius: 10px;
+  background: #fff;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text);
+}
+
+.al-modal-campo input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px #dbe9fd;
+}
+
+.al-modal-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: var(--high-bg);
+  border: 1px solid #f8d0d0;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--high);
+}
+
+.al-modal-pie {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px 24px;
+  background: #f8fbff;
+  border-top: 1px solid #edf1f7;
+}
+
+.al-btn-prim,
+.al-btn-sec,
+.al-btn-peligro {
+  padding: 12px 22px;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.al-btn-prim {
+  background: var(--primary);
+  color: #fff;
+}
+
+.al-btn-prim:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+
+.al-btn-prim:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.al-btn-sec {
+  background: #eaf1fa;
+  color: var(--primary);
+}
+
+.al-btn-sec:hover {
+  background: #dbe9fd;
+}
+
+.al-btn-peligro {
+  background: var(--high);
+  color: #fff;
+}
+
+.al-btn-peligro:hover {
+  filter: brightness(0.92);
+}
+
+@keyframes al-fondo-aparecer {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes al-modal-aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

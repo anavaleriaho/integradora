@@ -13,8 +13,8 @@ import TablaAlumnos from '../components/alumnos/TablaAlumnos';
 import PanelFiltros from '../components/alumnos/PanelFiltros';
 import type { Filtros } from '../components/alumnos/PanelFiltros';
 import ResumenRapido from '../components/alumnos/ResumenRapido';
-import { alumnos } from '../data/alumnos';
-import type { NivelRiesgo } from '../types';
+import { alumnos as alumnosIniciales } from '../data/alumnos';
+import type { Alumno, NivelRiesgo } from '../types';
 import '../styles/alumnos.css';
 
 const POR_PAGINA = 7;
@@ -30,11 +30,12 @@ export default function Alumnos() {
   const [filtros, setFiltros] = useState<Filtros>(filtrosIniciales);
   const [pagina, setPagina] = useState(1);
 
+  const [alumnos, setAlumnos] = useState<Alumno[]>(alumnosIniciales);
   const total = alumnos.length;
   const contar = (n: NivelRiesgo) =>
     alumnos.filter((a) => a.riesgo === n).length;
   const porcentaje = (n: NivelRiesgo) =>
-    ((contar(n) / total) * 100).toFixed(1);
+  total === 0 ? '0.0' : ((contar(n) / total) * 100).toFixed(1);
 
   const carreras = [...new Set(alumnos.map((a) => a.carrera))];
   const semestres = Array.from({ length: 12 }, (_, i) => i + 1);
@@ -67,6 +68,26 @@ export default function Alumnos() {
   const cambiarFiltros = (cambios: Partial<Filtros>) => {
     setFiltros({ ...filtros, ...cambios });
     setPagina(1);
+  };
+
+// Devuelve un mensaje de error si la matrícula ya la tiene otro alumno
+  const editarAlumno = (
+    id: number,
+    datos: { nombre: string; matricula: string }
+  ): string | null => {
+  const normalizar = (m: string) => m.replace(/[^0-9a-z]/gi, '').toLowerCase();
+  const repetida = alumnos.some(
+    (a) =>
+      a.id !== id && normalizar(a.matricula) === normalizar(datos.matricula)
+  );
+  if (repetida) return 'Ya existe otro alumno con esa matrícula.';
+
+  setAlumnos((prev) => prev.map((a) => (a.id === id ? { ...a, ...datos } : a)));
+  return null;
+  };
+
+  const eliminarAlumno = (id: number) => {
+    setAlumnos((prev) => prev.filter((a) => a.id !== id));
   };
 
   const limpiar = () => {
@@ -200,6 +221,8 @@ export default function Alumnos() {
             pagina={paginaActual}
             totalPaginas={totalPaginas}
             onPagina={setPagina}
+            onEditar={editarAlumno}
+            onEliminar={eliminarAlumno}
           />
 
           <aside className="al-lateral">

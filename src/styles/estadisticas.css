@@ -1,42 +1,113 @@
 /* ===== Pantalla Estadísticas ===== */
-.es-filtros {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
+/* ---------- Filtros y reportes (parte superior) ---------- */
+.es-controles {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
   gap: 16px;
-  padding: 16px 20px;
-  background: #fff;
-  border-radius: 12px;
+  margin-bottom: 4px;
 }
+
+.es-filtros,
+.es-reporte {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px;
+  background: var(--card);
+  border: 1px solid #dbe6f5;
+  border-radius: 14px;
+  min-width: 0;
+}
+
 .es-filtros-titulo {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-weight: 600;
-  width: 100%;
+  font-size: 16px;
+  font-weight: 700;
 }
+
+.es-filtros-titulo svg {
+  color: var(--primary);
+}
+
+.es-filtros-campos {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
 .es-campo {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  flex: 1;
-  min-width: 180px;
-  font-size: 14px;
+  gap: 6px;
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 600;
 }
+
 .es-campo select {
-  padding: 8px 10px;
+  width: 100%;
+  min-width: 0;
+  padding: 10px 12px;
   border: 1px solid #d0d5dd;
-  border-radius: 8px;
+  border-radius: 10px;
+  background: #fff;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text);
 }
+
 .es-filtros-acciones,
 .es-reportes-botones {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  margin-top: auto;
 }
+
+.es-filtros-acciones .rp-btn,
+.es-reportes-botones .rp-btn {
+  width: auto;
+  flex: 1;
+  min-width: 130px;
+  padding: 12px 16px;
+}
+
+.rp-btn.es-btn-sec {
+  background: #eaf1fa;
+  color: var(--primary);
+}
+
+.rp-btn.es-btn-sec:hover:not(:disabled) {
+  background: #dbe9fd;
+}
+
+.es-nota {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.es-reporte .rp-mensaje {
+  margin-bottom: 0;
+}
+
 .es-filtro-actual {
   margin: 12px 0;
   font-size: 14px;
+}
+
+@media (max-width: 1300px) {
+  .es-controles {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .es-filtros-campos {
+    grid-template-columns: 1fr;
+  }
 }
 /* ---------- Tarjetas superiores ---------- */
 .es-tarjetas {

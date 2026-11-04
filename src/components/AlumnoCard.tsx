@@ -1,4 +1,4 @@
-import { CircleAlert, CircleCheck, Users, GraduationCap, FileText, ArrowRight } from 'lucide-react';
+import { CircleAlert, CircleCheck, Users, GraduationCap, FileText } from 'lucide-react';
 import type { Alumno } from '../types';
 
 const etiquetas = {
@@ -60,10 +60,6 @@ export default function AlumnoCard({ alumno }: Props) {
           <strong>{alumno.reprobadas}</strong>
         </div>
       </div>
-
-      <button className="btn-detalles">
-        Ver detalles <ArrowRight size={16} />
-      </button>
     </article>
   );
 }
