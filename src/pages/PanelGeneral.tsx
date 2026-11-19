@@ -6,7 +6,6 @@ import {
   FileText,
   UserCheck,
 } from 'lucide-react';
-import logo from "../assets/images/logo-proedu.png";
 import Header from '../components/Header';
 import { modelo } from '../data/analisis';
 import '../styles/panel.css';
@@ -49,20 +48,16 @@ export default function PanelGeneral() {
 
       <div className="pagina">
         <section className="pg-hero">
-          <div className="pg-logo">
-            <img src={logo} alt="Logo de ProEdu" />
-          </div>
           <div>
             <h2>proedu</h2>
-            <p className="pg-tagline">
-              Sistema inteligente para la detección de riesgo académico
-            </p>
             <p className="pg-desc">
-              Plataforma web que utiliza inteligencia artificial para detectar
-              diariamente a los estudiantes en riesgo de abandono, y ayudar al
-              personal docente (tutores, psicólogos y trabajadores sociales) a
-              intervenir a tiempo. Ademas permite generar reportes en PDF,
-              Excel y CSV como respaldo de los datos analizados,
+              proedu es una plataforma web integrada con un sistema
+              inteligente para la detección de riesgo académico que utiliza
+              inteligencia artificial para detectar diariamente a los
+              estudiantes en riesgo de abandono y notificar al personal a
+              cargo y así de esta manera intervenir a tiempo. Permite generar
+              reportes en PDF, Excel y CSV como respaldo de los datos
+              analizados por el modelo.
             </p>
 
             <div className="pg-pildoras">

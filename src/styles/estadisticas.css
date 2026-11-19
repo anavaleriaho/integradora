@@ -322,3 +322,16 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ---------- Fila de un solo panel (Rendimiento por grupo) ---------- */
+.es-fila.es-completa {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* ---------- Gráficas sin datos para el filtro aplicado ---------- */
+.es-sin-datos {
+  padding: 90px 0;
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-muted);
+}

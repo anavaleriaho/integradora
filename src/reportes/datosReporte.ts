@@ -8,6 +8,7 @@ import {
   asistenciaPromedio,
   totalReprobadas,
   tasaAprobacion,
+  filtrarAlumnos,
 } from '../data/estadisticas';
 
 export interface AlumnoReporte {
@@ -107,22 +108,7 @@ export function construirReporte(
   const filtrado = hayFiltros(filtros);
 
   // 1. Filtrar alumnos
-  const lista = alumnos.filter((a) => {
-    if (filtros.carrera && normalizar(a.carrera) !== normalizar(filtros.carrera)) {
-      return false;
-    }
-    if (filtros.cuatrimestre && Number(a.semestre) !== Number(filtros.cuatrimestre)) {
-      return false;
-    }
-    if (filtros.grupo) {
-      // Los datos estáticos pueden no tener "grupo"; si no existe, no se descarta
-      const grupo = (a as { grupo?: string }).grupo;
-      if (grupo !== undefined && normalizar(grupo) !== normalizar(filtros.grupo)) {
-        return false;
-      }
-    }
-    return true;
-  });
+  const lista = filtrarAlumnos(alumnos, filtros);
 
   if (filtrado && lista.length === 0) {
     throw new Error('No hay alumnos con los filtros seleccionados.');

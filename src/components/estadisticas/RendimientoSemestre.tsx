@@ -8,14 +8,21 @@ import {
   LabelList,
 } from 'recharts';
 import PanelGrafica from './PanelGrafica';
-import { promedioPorSemestre } from '../../data/estadisticas';
 
-export default function RendimientoSemestre() {
+interface Props {
+  datos: { semestre: string; promedio: number }[];
+}
+
+export default function RendimientoSemestre({ datos }: Props) {
   return (
-    <PanelGrafica titulo="Rendimiento académico" subtitulo="Promedio por cuatrimestre">
+    <PanelGrafica
+      titulo="Rendimiento académico"
+      subtitulo="Promedio por cuatrimestre"
+      vacio={datos.length === 0}
+    >
       <ResponsiveContainer width="100%" height={240}>
         <AreaChart
-          data={promedioPorSemestre}
+          data={datos}
           margin={{ top: 24, right: 20, left: -20, bottom: 0 }}
         >
           <CartesianGrid stroke="#e5ecf5" />

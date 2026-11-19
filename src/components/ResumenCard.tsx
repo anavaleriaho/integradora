@@ -19,8 +19,8 @@ export default function ResumenCard({
     <div className={`resumen-card ${tipo}`}>
       <div className="resumen-icono">{icono}</div>
       <div>
-        <p className="resumen-numero">{numero}</p>
         <p className="resumen-titulo">{titulo}</p>
+        <p className="resumen-numero">{numero}</p>
         <p className="resumen-desc">{descripcion}</p>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { Sparkles, ArrowUpRight, Minus, Check, ClipboardList, ArrowRight } from 'lucide-react';
+import { Sparkles, ArrowUpRight, Minus, Check } from 'lucide-react';
 import { patrones } from '../../data/analisis';
 
 const iconos = {
@@ -27,12 +27,6 @@ export default function PatronesDetectados() {
           </div>
         ))}
       </div>
-
-      <button className="an-btn-ancho">
-        <ClipboardList size={16} />
-        Ver detalles completos
-        <ArrowRight size={16} />
-      </button>
     </section>
   );
 }

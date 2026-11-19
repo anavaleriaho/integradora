@@ -6,12 +6,8 @@ import {
   CircleCheck,
 } from 'lucide-react';
 import PanelGrafica from './PanelGrafica';
-import { conteoRiesgo } from '../../data/analisis';
-import {
-  cambioRiesgo,
-  cambios,
-  tasaAprobacion,
-} from '../../data/estadisticas';
+import type { NivelRiesgo } from '../../types';
+import { cambioRiesgo, cambios } from '../../data/estadisticas';
 
 function delta(valor: number, subeEsBueno: boolean, sufijo = '') {
   if (valor === 0) return { texto: '=', clase: 'ambar' };
@@ -28,41 +24,52 @@ interface Fila {
   clase: string;
   etiqueta: string;
   valor: string | number;
-  cambio: { texto: string; clase: string };
+  cambio: { texto: string; clase: string } | null;
 }
 
-const filas: Fila[] = [
-  {
-    icono: <TriangleAlert size={18} />,
-    clase: 'alto',
-    etiqueta: 'Alumnos con riesgo alto',
-    valor: conteoRiesgo.alto,
-    cambio: delta(cambioRiesgo.alto, false),
-  },
-  {
-    icono: <CircleAlert size={18} />,
-    clase: 'medio',
-    etiqueta: 'Alumnos con riesgo medio',
-    valor: conteoRiesgo.medio,
-    cambio: delta(cambioRiesgo.medio, false),
-  },
-  {
-    icono: <ShieldCheck size={18} />,
-    clase: 'bajo',
-    etiqueta: 'Alumnos con riesgo bajo',
-    valor: conteoRiesgo.bajo,
-    cambio: delta(cambioRiesgo.bajo, true),
-  },
-  {
-    icono: <CircleCheck size={18} />,
-    clase: 'tasa',
-    etiqueta: 'Tasa de aprobación',
-    valor: `${tasaAprobacion}%`,
-    cambio: delta(cambios.aprobacion, true, '%'),
-  },
-];
+interface Props {
+  riesgo: Record<NivelRiesgo, number>;
+  tasaAprobacion: number;
+  // Los cambios solo existen para el total de alumnos; con un filtro se ocultan
+  conCambios: boolean;
+}
 
-export default function ResumenGeneral() {
+export default function ResumenGeneral({
+  riesgo,
+  tasaAprobacion,
+  conCambios,
+}: Props) {
+  const filas: Fila[] = [
+    {
+      icono: <TriangleAlert size={18} />,
+      clase: 'alto',
+      etiqueta: 'Alumnos con riesgo alto',
+      valor: riesgo.alto,
+      cambio: conCambios ? delta(cambioRiesgo.alto, false) : null,
+    },
+    {
+      icono: <CircleAlert size={18} />,
+      clase: 'medio',
+      etiqueta: 'Alumnos con riesgo medio',
+      valor: riesgo.medio,
+      cambio: conCambios ? delta(cambioRiesgo.medio, false) : null,
+    },
+    {
+      icono: <ShieldCheck size={18} />,
+      clase: 'bajo',
+      etiqueta: 'Alumnos con riesgo bajo',
+      valor: riesgo.bajo,
+      cambio: conCambios ? delta(cambioRiesgo.bajo, true) : null,
+    },
+    {
+      icono: <CircleCheck size={18} />,
+      clase: 'tasa',
+      etiqueta: 'Tasa de aprobación',
+      valor: `${tasaAprobacion}%`,
+      cambio: conCambios ? delta(cambios.aprobacion, true, '%') : null,
+    },
+  ];
+
   return (
     <PanelGrafica titulo="Resumen general">
       <ul className="es-resumen">
@@ -71,7 +78,11 @@ export default function ResumenGeneral() {
             <span className={`es-resumen-icono ${f.clase}`}>{f.icono}</span>
             <span>{f.etiqueta}</span>
             <strong>{f.valor}</strong>
-            <span className={`es-delta ${f.cambio.clase}`}>{f.cambio.texto}</span>
+            {f.cambio && (
+              <span className={`es-delta ${f.cambio.clase}`}>
+                {f.cambio.texto}
+              </span>
+            )}
           </li>
         ))}
       </ul>

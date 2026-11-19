@@ -12,20 +12,6 @@
   margin-bottom: 20px;
 }
 
-.pg-logo {
-  width: 120px;
-  height: 120px;
-  border-radius: 30px;
-  color: var(--primary);
-  display: grid;
-  place-items: center;
-  flex-shrink: 0;
-}
-
-.pg-logo img {
-  width: 100px;
-  object-fit: contain;
-}
 
 .pg-hero h2 {
   font-size: 48px;
@@ -34,18 +20,12 @@
   line-height: 1.1;
 }
 
-.pg-tagline {
-  font-size: 18px;
-  font-weight: 500;
-  color: #cfe0ff;
-  margin: 8px 0 14px;
-}
-
 .pg-desc {
+  margin-top: 12px;
   font-size: 15px;
   line-height: 1.7;
   color: #e3edff;
-  max-width: 720px;
+  max-width: 860px;
 }
 
 /* ---------- IA en acción ---------- */

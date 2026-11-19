@@ -8,14 +8,21 @@ import {
   LabelList,
 } from 'recharts';
 import PanelGrafica from './PanelGrafica';
-import { asistenciaSemanal } from '../../data/estadisticas';
 
-export default function AsistenciaSemanal() {
+interface Props {
+  datos: { dia: string; asistencia: number }[];
+}
+
+export default function RendimientoCarrera({ datos }: Props) {
   return (
-    <PanelGrafica titulo="Asistencia" subtitulo="Asistencia promedio por semana">
+    <PanelGrafica
+      titulo="Asistencia semanal"
+      subtitulo="Asistensia promedio por semana"
+      vacio={datos.length === 0}
+    >
       <ResponsiveContainer width="100%" height={240}>
         <AreaChart
-          data={asistenciaSemanal}
+          data={datos}
           margin={{ top: 24, right: 20, left: -10, bottom: 0 }}
         >
           <CartesianGrid stroke="#e5ecf5" />

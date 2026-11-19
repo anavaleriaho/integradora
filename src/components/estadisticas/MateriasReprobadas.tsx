@@ -9,21 +9,24 @@ import {
   LabelList,
 } from 'recharts';
 import PanelGrafica from './PanelGrafica';
-import { reprobadasPorMateria } from '../../data/estadisticas';
 
-const valores = reprobadasPorMateria.map((m) => m.reprobadas);
-const maximo = Math.max(...valores);
-const minimo = Math.min(...valores);
+interface Props {
+  datos: { materia: string; reprobadas: number }[];
+}
 
-const color = (v: number) =>
-  v === maximo ? '#EF4444' : v === minimo ? '#22C55E' : '#F59E0B';
+export default function MateriasReprobadas({ datos }: Props) {
+  const valores = datos.map((m) => m.reprobadas);
+  const maximo = Math.max(...valores);
+  const minimo = Math.min(...valores);
 
-export default function MateriasReprobadas() {
+  const color = (v: number) =>
+    v === maximo ? '#EF4444' : v === minimo ? '#22C55E' : '#F59E0B';
+
   return (
-    <PanelGrafica titulo="Materias reprobadas">
+    <PanelGrafica titulo="Materias reprobadas" vacio={datos.length === 0}>
       <ResponsiveContainer width="100%" height={240}>
         <BarChart
-          data={reprobadasPorMateria}
+          data={datos}
           layout="vertical"
           margin={{ top: 10, right: 30, left: 10, bottom: 0 }}
         >
@@ -37,11 +40,11 @@ export default function MateriasReprobadas() {
           <YAxis
             type="category"
             dataKey="materia"
-            width={100}
+            width={170}
             tick={{ fontSize: 12 }}
           />
           <Bar dataKey="reprobadas" radius={[0, 6, 6, 0]} maxBarSize={22}>
-            {reprobadasPorMateria.map((m) => (
+            {datos.map((m) => (
               <Cell key={m.materia} fill={color(m.reprobadas)} />
             ))}
             <LabelList

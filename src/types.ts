@@ -12,4 +12,5 @@ export interface Alumno {
   asistencia: number;
   promedio: number;
   reprobadas: number;
+  grupo?: string;
 }

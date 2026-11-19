@@ -9,16 +9,23 @@ import {
   LabelList,
 } from 'recharts';
 import PanelGrafica from './PanelGrafica';
-import { promedioPorCarrera } from '../../data/estadisticas';
+
+interface Props {
+  datos: { carrera: string; promedio: number }[];
+}
 
 const colores = ['#3B82F6', '#8B5CF6', '#22C55E', '#F59E0B', '#EF4444'];
 
-export default function RendimientoCarrera() {
+export default function RendimientoCarrera({ datos }: Props) {
   return (
-    <PanelGrafica titulo="Rendimiento por carrera" subtitulo="Promedio por carrera">
+    <PanelGrafica
+      titulo="Rendimiento por carrera"
+      subtitulo="Promedio por carrera"
+      vacio={datos.length === 0}
+    >
       <ResponsiveContainer width="100%" height={240}>
         <BarChart
-          data={promedioPorCarrera}
+          data={datos}
           margin={{ top: 24, right: 10, left: -20, bottom: 0 }}
         >
           <CartesianGrid stroke="#e5ecf5" vertical={false} />
@@ -29,7 +36,7 @@ export default function RendimientoCarrera() {
             tick={{ fontSize: 12 }}
           />
           <Bar dataKey="promedio" radius={[6, 6, 0, 0]} maxBarSize={48}>
-            {promedioPorCarrera.map((_, i) => (
+            {datos.map((_, i) => (
               <Cell key={i} fill={colores[i % colores.length]} />
             ))}
             <LabelList
