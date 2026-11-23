@@ -1,193 +1,168 @@
-from fastapi import FastAPI
-from sqlalchemy import text
-from db import engine
-from datetime import date
-from pydantic import BaseModel
-
-app = FastAPI(title="Detección de riesgo académico")
-
+from pathlib import Path
+import joblib
+import numpy as np
+from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.orm import Session
+from sqlalchemy import text
+from db import get_db
 
+app = FastAPI(title="API Sistema de Riesgo Académico")
+
+# Habilitar CORS para peticiones desde React
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=["*"],
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-@app.get("/salud")
-def salud():
-    with engine.connect() as conn:
-        conn.execute(text("SELECT 1"))
-    return {"estado": "ok"}
+BASE_DIR = Path(__file__).resolve().parent
+MODEL_PATH = BASE_DIR / "modelo_random_forest_proedu_90.joblib"
 
-@app.get("/carreras")
-def listar_carreras():
-    with engine.connect() as conn:
-        filas = conn.execute(text("SELECT id_carrera, nombre_carrera FROM carreras"))
-        return [dict(f._mapping) for f in filas]
+try:
+    modelo_rf = joblib.load(MODEL_PATH)
+    print("✅ Modelo Random Forest cargado correctamente.")
+except Exception as e:
+    print(f"❌ Error al cargar el modelo: {e}")
+    modelo_rf = None
 
-class EstudianteNuevo(BaseModel):
-    matricula: str
-    nombre: str
-    apellido_paterno: str
-    apellido_materno: str | None = None
-    fecha_nacimiento: date | None = None
-    genero: str | None = None
-    telefono: str | None = None
-    direccion: str | None = None
-    id_carrera: int | None = None
+# Endpoint 1: Listar todos los estudiantes para la Tabla General de React
+@app.get("/api/estudiantes")
+def listar_estudiantes(db: Session = Depends(get_db)):
+    try:
+        query = text("""
+            SELECT 
+                e.id_estudiante,
+                e.matricula,
+                CONCAT(e.nombre, ' ', e.apellido_paterno, ' ', COALESCE(e.apellido_materno, '')) AS nombre_completo,
+                c.clave AS carrera,
+                g.nombre_grupo AS grupo,
+                p.riesgo,
+                p.probabilidad
+            FROM estudiantes e
+            LEFT JOIN carreras c ON e.id_carrera = c.id_carrera
+            LEFT JOIN inscripciones i ON e.id_estudiante = i.id_estudiante
+            LEFT JOIN grupos g ON i.id_grupo = g.id_grupo
+            LEFT JOIN (
+                SELECT DISTINCT ON (id_estudiante) id_estudiante, riesgo, probabilidad
+                FROM predicciones_riesgo
+                ORDER BY id_estudiante, fecha_prediccion DESC
+            ) p ON e.id_estudiante = p.id_estudiante
+            ORDER BY e.id_estudiante ASC;
+        """)
+        
+        resultados = db.execute(query).fetchall()
+        lista = []
+        for r in resultados:
+            lista.append({
+                "id_estudiante": r.id_estudiante,
+                "matricula": r.matricula,
+                "nombre_completo": r.nombre_completo.strip(),
+                "carrera": r.carrera or "N/A",
+                "grupo": r.grupo or "N/A",
+                "riesgo": r.riesgo or "sin evaluar",
+                "probabilidad": float(r.probabilidad) if r.probabilidad else 0.0
+            })
+        return lista
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/estudiantes", status_code=201)
-def crear_estudiante(e: EstudianteNuevo):
-    with engine.begin() as conn:
-        fila = conn.execute(text("""
-            INSERT INTO estudiantes (matricula, nombre, apellido_paterno, apellido_materno,
-                fecha_nacimiento, genero, telefono, direccion, id_carrera)
-            VALUES (:matricula, :nombre, :apellido_paterno, :apellido_materno,
-                :fecha_nacimiento, :genero, :telefono, :direccion, :id_carrera)
-            RETURNING id_estudiante
-        """), e.model_dump())
-        return {"id_estudiante": fila.scalar()}
+# Endpoint 2: Predicción individual por ID de estudiante
+@app.get("/api/predict/{id_estudiante}")
+def predecir_riesgo_estudiante(id_estudiante: int, db: Session = Depends(get_db)):
+    if modelo_rf is None:
+        raise HTTPException(status_code=500, detail="El modelo no está disponible")
 
-@app.get("/estudiantes")
-def listar_estudiantes():
-    with engine.connect() as conn:
-        filas = conn.execute(text(
-            "SELECT id_estudiante, matricula, nombre, apellido_paterno, apellido_materno, estatus "
-            "FROM estudiantes ORDER BY id_estudiante"
-        ))
-        return [dict(f._mapping) for f in filas]
+    try:
+        query_metricas = text("""
+            SELECT 
+                e.id_estudiante,
+                c.clave AS clave_carrera,
+                COALESCE(g.cuatrimestre, 1) AS cuatrimestre_corte,
+                COALESCE(AVG(cal.calificacion), 8.0) AS promedio_cuatri_actual,
+                COALESCE(AVG(cal.calificacion), 8.0) AS promedio_cuat_anterior,
+                COUNT(CASE WHEN cal.calificacion < 7.0 THEN 1 END) AS reprobadas_cuat_actual,
+                COUNT(CASE WHEN cal.calificacion < 7.0 THEN 1 END) AS reprobadas_acumuladas,
+                COALESCE(AVG(cal.calificacion), 8.0) AS promedio_historico,
+                COALESCE(AVG(asis.porcentaje), 100.0) AS asistencia_porcentaje
+            FROM estudiantes e
+            LEFT JOIN carreras c ON e.id_carrera = c.id_carrera
+            LEFT JOIN inscripciones i ON e.id_estudiante = i.id_estudiante
+            LEFT JOIN grupos g ON i.id_grupo = g.id_grupo
+            LEFT JOIN cursamiento_materia cm ON i.id_inscripcion = cm.id_inscripcion
+            LEFT JOIN calificaciones cal ON cm.id_cursamiento = cal.id_cursamiento
+            LEFT JOIN asistencias asis ON cm.id_cursamiento = asis.id_cursamiento
+            WHERE e.id_estudiante = :id_estudiante
+            GROUP BY e.id_estudiante, c.clave, g.cuatrimestre;
+        """)
+        datos = db.execute(query_metricas, {"id_estudiante": id_estudiante}).fetchone()
 
-class InscripcionNueva(BaseModel):
-    id_estudiante: int
-    id_grupo: int
+        if not datos:
+            raise HTTPException(status_code=404, detail="Estudiante no encontrado")
 
-@app.post("/inscripciones", status_code=201)
-def inscribir(i: InscripcionNueva):
-    with engine.begin() as conn:
-        id_insc = conn.execute(text("""
-            INSERT INTO inscripciones (id_estudiante, id_grupo)
-            VALUES (:id_estudiante, :id_grupo) RETURNING id_inscripcion
-        """), i.model_dump()).scalar()
-        # una fila de cursamiento por cada materia del grupo
-        conn.execute(text("""
-            INSERT INTO cursamiento_materia (id_inscripcion, id_grupo_materia)
-            SELECT :id_insc, id_grupo_materia FROM grupo_materia WHERE id_grupo = :id_grupo
-        """), {"id_insc": id_insc, "id_grupo": i.id_grupo})
-    return {"id_inscripcion": id_insc}
+        clave_carrera = datos.clave_carrera or ""
+        cuatrimestre_corte = int(datos.cuatrimestre_corte)
+        promedio_cuatri_actual = float(datos.promedio_cuatri_actual)
+        promedio_cuat_anterior = float(datos.promedio_cuat_anterior)
+        reprobadas_cuat_actual = int(datos.reprobadas_cuat_actual)
+        reprobadas_acumuladas = int(datos.reprobadas_acumuladas)
+        promedio_historico = float(datos.promedio_historico)
+        asistencia_porcentaje = float(datos.asistencia_porcentaje)
 
-class CalificacionNueva(BaseModel):
-    id_cursamiento: int
-    id_tipo_evaluacion: int
-    calificacion: float
-    fuente: str | None = "manual"
+        carrera_ASP = 1 if clave_carrera == "ASP" else 0
+        carrera_DGS = 1 if clave_carrera == "DGS" else 0
+        carrera_MEC = 1 if clave_carrera == "MEC" else 0
+        carrera_NEG = 1 if clave_carrera == "NEG" else 0
+        carrera_OCI = 1 if clave_carrera == "OCI" else 0
 
-@app.post("/calificaciones", status_code=201)
-def registrar_calificacion(c: CalificacionNueva):
-    with engine.begin() as conn:
-        id_cal = conn.execute(text("""
-            INSERT INTO calificaciones (id_cursamiento, id_tipo_evaluacion, calificacion, fuente)
-            VALUES (:id_cursamiento, :id_tipo_evaluacion, :calificacion, :fuente)
-            RETURNING id_calificacion
-        """), c.model_dump()).scalar()
-    return {"id_calificacion": id_cal}
+        tendencia_promedio = promedio_cuatri_actual - promedio_cuat_anterior
+        ratio_reprobadas_acum = reprobadas_acumuladas / max(cuatrimestre_corte, 1)
+        brecha_asistencia = 100.0 - asistencia_porcentaje
 
-@app.get("/estudiantes/{id_estudiante}/calificaciones")
-def calificaciones_estudiante(id_estudiante: int):
-    with engine.connect() as conn:
-        filas = conn.execute(text("""
-            SELECT m.nombre AS materia, t.nombre AS evaluacion, c.calificacion
-            FROM inscripciones i
-            JOIN cursamiento_materia cm ON cm.id_inscripcion = i.id_inscripcion
-            JOIN grupo_materia gm ON gm.id_grupo_materia = cm.id_grupo_materia
-            JOIN materias m ON m.id_materia = gm.id_materia
-            JOIN calificaciones c ON c.id_cursamiento = cm.id_cursamiento
-            JOIN tipos_evaluacion t ON t.id_tipo_evaluacion = c.id_tipo_evaluacion
-            WHERE i.id_estudiante = :id ORDER BY m.nombre, t.orden
-        """), {"id": id_estudiante})
-        return [dict(f._mapping) for f in filas]
+        features = np.array([[
+            cuatrimestre_corte, promedio_cuatri_actual, promedio_cuat_anterior,
+            reprobadas_cuat_actual, reprobadas_acumuladas, promedio_historico,
+            asistencia_porcentaje, carrera_ASP, carrera_DGS, carrera_MEC,
+            carrera_NEG, carrera_OCI, tendencia_promedio, ratio_reprobadas_acum, brecha_asistencia
+        ]])
 
-from fastapi import Query
+        prediccion_clase = int(modelo_rf.predict(features)[0])
+        probabilidades = modelo_rf.predict_proba(features)[0]
+        prob_riesgo = float(probabilidades[1]) if len(probabilidades) > 1 else float(probabilidades[0])
+        probabilidad_porcentaje = round(prob_riesgo * 100, 2)
 
-# Calificación mínima aprobatoria. Ajústala a la de tu institución.
-CALIFICACION_MINIMA = 7.0
+        if prob_riesgo >= 0.7:
+            riesgo = "alto"
+        elif prob_riesgo >= 0.4:
+            riesgo = "medio"
+        else:
+            riesgo = "bajo"
 
+        insert_sql = text("""
+            INSERT INTO predicciones_riesgo (id_estudiante, id_modelo, riesgo, probabilidad, fecha_prediccion)
+            VALUES (:id_estudiante, 1, :riesgo, :probabilidad, NOW())
+            RETURNING id_prediccion;
+        """)
+        res = db.execute(insert_sql, {
+            "id_estudiante": id_estudiante,
+            "riesgo": riesgo,
+            "probabilidad": probabilidad_porcentaje
+        })
+        db.commit()
+        id_prediccion = res.fetchone()[0]
 
-@app.get("/grupos")
-def listar_grupos(carrera_id: int | None = Query(None)):
-    with engine.connect() as conn:
-        filas = conn.execute(text("""
-            SELECT DISTINCT nombre_grupo AS nombre
-            FROM grupos
-            WHERE activo = TRUE
-              AND (CAST(:carrera_id AS INT) IS NULL OR id_carrera = :carrera_id)
-            ORDER BY nombre_grupo
-        """), {"carrera_id": carrera_id})
-        return [dict(f._mapping) for f in filas]
-
-
-def _metricas(conn, carrera_id, grupo, cuatrimestre):
-    """Calcula las 4 métricas para un filtro. Los filtros vacíos (None) no filtran."""
-    fila = conn.execute(text("""
-        WITH base AS (
-            SELECT i.id_inscripcion, i.id_estudiante
-            FROM inscripciones i
-            JOIN grupos g ON g.id_grupo = i.id_grupo
-            WHERE i.estatus = 'activo'
-              AND (CAST(:carrera_id AS INT) IS NULL OR g.id_carrera = :carrera_id)
-              AND (CAST(:grupo AS VARCHAR) IS NULL OR g.nombre_grupo = :grupo)
-              AND (CAST(:cuatrimestre AS INT) IS NULL OR g.cuatrimestre = :cuatrimestre)
-        ),
-        prom_cursamiento AS (
-            SELECT cm.id_cursamiento, AVG(c.calificacion) AS prom
-            FROM base b
-            JOIN cursamiento_materia cm ON cm.id_inscripcion = b.id_inscripcion
-            JOIN calificaciones c ON c.id_cursamiento = cm.id_cursamiento
-            WHERE c.es_oficial = TRUE
-            GROUP BY cm.id_cursamiento
-        )
-        SELECT
-            (SELECT COUNT(DISTINCT id_estudiante) FROM base) AS total_alumnos,
-            (SELECT AVG(prom) FROM prom_cursamiento) AS promedio,
-            (SELECT AVG(a.porcentaje)
-               FROM base b
-               JOIN cursamiento_materia cm ON cm.id_inscripcion = b.id_inscripcion
-               JOIN asistencias a ON a.id_cursamiento = cm.id_cursamiento) AS asistencia,
-            (SELECT COUNT(*) FROM prom_cursamiento WHERE prom < :minima) AS reprobadas
-    """), {
-        "carrera_id": carrera_id,
-        "grupo": grupo,
-        "cuatrimestre": cuatrimestre,
-        "minima": CALIFICACION_MINIMA,
-    }).one()
-
-    return {
-        "totalAlumnos": int(fila.total_alumnos or 0),
-        "promedioGeneral": round(float(fila.promedio or 0), 1),
-        "asistenciaPromedio": round(float(fila.asistencia or 0), 1),
-        "totalReprobadas": int(fila.reprobadas or 0),
-    }
-
-
-@app.get("/estadisticas")
-def estadisticas(
-    carrera_id: int | None = Query(None),
-    grupo: str | None = Query(None),
-    cuatrimestre: int | None = Query(None),
-):
-    with engine.connect() as conn:
-        actual = _metricas(conn, carrera_id, grupo, cuatrimestre)
-
-        # Cambios: solo se comparan si se eligió un cuatrimestre y hay datos del anterior
-        cambios = {"promedio": 0, "asistencia": 0, "reprobadas": 0}
-        if cuatrimestre and cuatrimestre > 1:
-            previo = _metricas(conn, carrera_id, grupo, cuatrimestre - 1)
-            if previo["totalAlumnos"] > 0:
-                cambios = {
-                    "promedio": round(actual["promedioGeneral"] - previo["promedioGeneral"], 1),
-                    "asistencia": round(actual["asistenciaPromedio"] - previo["asistenciaPromedio"], 1),
-                    "reprobadas": actual["totalReprobadas"] - previo["totalReprobadas"],
-                }
-
-        return {**actual, "cambios": cambios}
+        return {
+            "id_prediccion": id_prediccion,
+            "id_estudiante": id_estudiante,
+            "promedio_calculado": round(promedio_cuatri_actual, 2),
+            "asistencia_calculada": round(asistencia_porcentaje, 2),
+            "reprobadas_calculadas": reprobadas_cuat_actual,
+            "riesgo": riesgo,
+            "probabilidad": probabilidad_porcentaje,
+            "clase_predicha": prediccion_clase
+        }
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
