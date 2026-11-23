@@ -12,6 +12,7 @@ import Configuracion from './pages/Configuracion';
 import MiSemaforo from './pages/MiSemaforo';
 import ConfiguracionAlumno from './pages/ConfiguracionAlumno';
 import EnConstruccion from './pages/EnConstruccion';
+import TablaAlumnos from "./components/alumnos/TablaAlumnos";
 
 export default function App() {
   return (
@@ -43,3 +44,4 @@ export default function App() {
     </BrowserRouter>
   );
 }
+

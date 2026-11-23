@@ -19,6 +19,7 @@ import { alumnos as alumnosIniciales } from '../data/alumnos';
 import { cargarAlumnos } from '../data/cargarAlumnos';
 import type { Alumno, NivelRiesgo } from '../types';
 import '../styles/alumnos.css';
+import { TablaEstudiantesAPI } from "../components/alumnos/TablaAlumnos";
 
 const POR_PAGINA = 7;
 
@@ -38,6 +39,8 @@ const filtrosIniciales: Filtros = {
   carrera: 'todas',
   semestre: 'todos',
 };
+
+
 
 export default function Alumnos() {
   const [filtros, setFiltros] = useState<Filtros>(filtrosIniciales);
@@ -189,7 +192,9 @@ export default function Alumnos() {
         titulo="Alumnos"
         subtitulo="Consulta y gestiona la información de los estudiantes."
       />
-
+      <div>
+      <TablaEstudiantesAPI />
+    </div>
       <div className="pagina">
         <section className="al-tarjetas">
           <TarjetaResumen
@@ -199,6 +204,8 @@ export default function Alumnos() {
             numero={total}
             descripcion="registrados"
           />
+          
+  
           <TarjetaResumen
             tipo="alto"
             icono={<TriangleAlert size={30} />}
@@ -221,104 +228,6 @@ export default function Alumnos() {
             descripcion={`${porcentaje('bajo')}% del total`}
           />
         </section>
-
-        <section className="al-toolbar">
-          <div className="al-buscador">
-            <Search size={18} />
-            <input
-              type="text"
-              placeholder="Buscar alumno (nombre, matrícula, carrera...)"
-              value={filtros.busqueda}
-              onChange={(e) => cambiarFiltros({ busqueda: e.target.value })}
-            />
-          </div>
-
-          <select
-            className="al-select"
-            value={valorNivel}
-            onChange={(e) => elegirNivel(e.target.value)}
-          >
-            <option value="todos">Todos los niveles de riesgo</option>
-            <option value="alto">Riesgo alto</option>
-            <option value="medio">Riesgo medio</option>
-            <option value="bajo">Riesgo bajo</option>
-            {valorNivel === 'varios' && (
-              <option value="varios" disabled>
-                Niveles personalizados
-              </option>
-            )}
-          </select>
-
-          <select
-            className="al-select"
-            value={filtros.carrera}
-            onChange={(e) => cambiarFiltros({ carrera: e.target.value })}
-          >
-            <option value="todas">Todas las carreras</option>
-            {carreras.map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
-
-          <select
-            className="al-select"
-            value={filtros.semestre}
-            onChange={(e) => cambiarFiltros({ semestre: e.target.value })}
-          >
-            <option value="todos">Todos los cuatrimestres</option>
-            {semestres.map((s) => (
-              <option key={s} value={s}>
-                Cuatrimestre {s}°
-              </option>
-            ))}
-          </select>
-
-          {hayFiltros && (
-            <button className="al-limpiar" onClick={limpiar}>
-              <X size={14} />
-              Limpiar filtros
-            </button>
-          )}
-
-          <button
-            className="al-actualizar"
-            onClick={actualizarLista}
-            disabled={actualizando}
-          >
-            <RefreshCw size={18} className={actualizando ? 'al-girando' : ''} />
-            {actualizando ? 'Actualizando...' : 'Actualizar lista'}
-          </button>
-
-          <button className="al-agregar" onClick={() => setAgregando(true)}>
-            <Plus size={18} />
-            Agregar alumno
-          </button>
-
-          <p
-            className={`al-actualizacion ${errorActualizacion ? 'error' : ''}`}
-            role="status"
-          >
-            {errorActualizacion || `Última actualización: ${horaActualizacion}`}
-          </p>
-        </section>
-
-        <div className="al-layout">
-          <TablaAlumnos
-            lista={visibles}
-            totalFiltrados={filtrados.length}
-            pagina={paginaActual}
-            totalPaginas={totalPaginas}
-            onPagina={setPagina}
-            onEditar={editarAlumno}
-            onEliminar={eliminarAlumno}
-          />
-
-          <aside className="al-lateral">
-            <ResumenRapido altos={contar('alto')} />
-          </aside>
-        </div>
       </div>
 
       {agregando && (
