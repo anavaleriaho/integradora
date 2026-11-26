@@ -697,8 +697,7 @@ a.menu-item {
 }
 
 .sidebar .logo-imagen {
-  width: 180px;
-  height: 180px;
-  margin: -34px 0;
-  object-fit: contain;
+  width: 150px;
+  height: auto;
+  margin: 4px 0 10px;
 }

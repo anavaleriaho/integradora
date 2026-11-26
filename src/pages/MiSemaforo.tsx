@@ -1,7 +1,9 @@
-import { GraduationCap, Percent, CircleAlert } from 'lucide-react';
+import { useState } from 'react';
+import { GraduationCap, Percent, CircleAlert, ChevronDown } from 'lucide-react';
 import Header from '../components/Header';
 import { useAuth } from '../auth/useAuth';
 import { buscarAlumno } from '../data/usuario';
+import { materiasReprobadas } from '../data/materias';
 import type { NivelRiesgo } from '../types';
 import '../styles/alumno.css';
 
@@ -48,6 +50,7 @@ const orden: NivelRiesgo[] = ['alto', 'medio', 'bajo'];
 
 export default function MiSemaforo() {
   const { usuario } = useAuth();
+  const [verReprobadas, setVerReprobadas] = useState(false);
   const alumno = usuario?.matricula ? buscarAlumno(usuario.matricula) : undefined;
 
   if (!alumno) {
@@ -67,6 +70,7 @@ export default function MiSemaforo() {
   }
 
   const info = contenido[alumno.riesgo];
+  const reprobadas = materiasReprobadas[alumno.id] ?? [];
   const palabras = alumno.nombre.split(' ');
   const iniciales = palabras
     .slice(0, 2)
@@ -127,13 +131,57 @@ export default function MiSemaforo() {
                 <span>Asistencia</span>
                 <strong>{alumno.asistencia}%</strong>
               </li>
-              <li>
-                <span className="ms-ind-icono">
-                  <CircleAlert size={22} />
-                </span>
-                <span>Materias reprobadas</span>
-                <strong>{alumno.reprobadas}</strong>
-              </li>
+              {reprobadas.length > 0 ? (
+                <li className="ms-ind-desplegable">
+                  <button
+                    type="button"
+                    className="ms-ind-boton"
+                    onClick={() => setVerReprobadas(!verReprobadas)}
+                    aria-expanded={verReprobadas}
+                    aria-controls="ms-reprobadas"
+                  >
+                    <span className="ms-ind-icono">
+                      <CircleAlert size={22} />
+                    </span>
+                    <span className="ms-ind-texto">
+                      Materias reprobadas
+                      <small>
+                        {verReprobadas ? 'Toca para ocultar' : 'Toca para ver cuáles son'}
+                      </small>
+                    </span>
+                    <strong>{alumno.reprobadas}</strong>
+                    <ChevronDown
+                      size={18}
+                      className={`ms-flecha ${verReprobadas ? 'abierta' : ''}`}
+                    />
+                  </button>
+
+                  {verReprobadas && (
+                    <div id="ms-reprobadas" className="ms-reprobadas">
+                      {reprobadas.map((m) => (
+                        <div key={m.nombre} className="ms-reprobada">
+                          <span>
+                            {m.nombre}
+                            <small>{m.cuatrimestre}° cuatrimestre</small>
+                          </span>
+                          <div className="ms-calif">
+                            <strong>{m.calificacion.toFixed(1)}</strong>
+                            <small>calificación</small>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </li>
+              ) : (
+                <li>
+                  <span className="ms-ind-icono">
+                    <CircleAlert size={22} />
+                  </span>
+                  <span>Materias reprobadas</span>
+                  <strong>{alumno.reprobadas}</strong>
+                </li>
+              )}
             </ul>
           </section>
         </div>

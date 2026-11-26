@@ -262,3 +262,95 @@
     text-align: center;
   }
 }
+
+/* ---------- Materias reprobadas desplegables ---------- */
+.ms-indicadores li.ms-ind-desplegable {
+  display: block;
+  padding: 0;
+}
+
+.ms-ind-boton {
+  display: grid;
+  grid-template-columns: 44px 1fr auto 20px;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 0;
+  border: none;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ms-ind-boton:hover .ms-ind-icono {
+  background: #dbe9fd;
+}
+
+.ms-ind-boton:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: 10px;
+}
+
+.ms-ind-texto {
+  display: flex;
+  flex-direction: column;
+}
+
+.ms-ind-texto small {
+  font-size: 12px;
+  color: var(--primary);
+}
+
+.ms-flecha {
+  color: var(--text-muted);
+  transition: transform 0.2s ease;
+}
+
+.ms-flecha.abierta {
+  transform: rotate(180deg);
+}
+
+.ms-reprobadas {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 0 16px 56px;
+}
+
+.ms-reprobada {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--high-bg);
+  border: 1px solid #f8d0d0;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.ms-reprobada span {
+  display: flex;
+  flex-direction: column;
+}
+
+.ms-reprobada small {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.ms-calif {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.ms-calif strong {
+  font-size: 20px;
+  color: var(--high);
+}

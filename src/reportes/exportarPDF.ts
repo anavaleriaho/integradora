@@ -2,8 +2,12 @@ import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { encabezadosAlumnos } from './datosReporte';
 import type { DatosReporte } from './datosReporte';
+import logo from '../assets/images/logo-proedu.png?inline';
 
 const AZUL: [number, number, number] = [17, 59, 122];
+
+// Proporción (ancho / alto) del logo recortado
+const LOGO_RELACION = 567 / 407;
 
 const colorRiesgo: Record<string, [number, number, number]> = {
   Alto: [220, 38, 38],
@@ -20,16 +24,17 @@ export function exportarPDF(d: DatosReporte) {
   // ----- Banda de encabezado -----
   doc.setFillColor(AZUL[0], AZUL[1], AZUL[2]);
   doc.rect(0, 0, ancho, 26, 'F');
+  // Logo blanco (ya incluye el nombre), centrado en la banda
+  const altoLogo = 19;
+  const anchoLogo = altoLogo * LOGO_RELACION;
+  doc.addImage(logo, 'PNG', margen, (26 - altoLogo) / 2, anchoLogo, altoLogo);
   doc.setTextColor(255, 255, 255);
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(22);
-  doc.text('ProEdu', margen, 15);
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(10);
   doc.text(
     'Sistema inteligente para la detección de riesgo académico',
-    margen,
-    21
+    margen + anchoLogo + 8,
+    15
   );
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(14);
